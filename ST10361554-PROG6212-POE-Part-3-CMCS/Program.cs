@@ -19,6 +19,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
             // Register SeedDatabase service
             builder.Services.AddScoped<SeedDatabase>();
 
