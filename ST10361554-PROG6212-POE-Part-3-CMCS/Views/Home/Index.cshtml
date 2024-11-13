@@ -2,7 +2,51 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .btn-primary {
+        background-color: #f46516;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+        }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to the Contract Monthly Claim System </h1>
+    <p class="lead">Streamlining Monthly Claims for Independent Contractor Lecturers</p>
+
+    <div class="mt-4">
+        <p>
+            The <strong>Contract Monthly Claim System (CMCS)</strong> is designed to simplify the process of submitting and
+            approving monthly claims for Independent Contractor (IC) lecturers.
+            This platform improves efficiency and accuracy in managing lecturer claims,
+            with features that support detailed claim submissions, document uploads, and streamlined approval workflows.
+        </p>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <h3>Submit Your Monthly Claims</h3>
+            <p>IC lecturers can quickly and accurately submit their monthly claims, calculate hours worked, and track the status of their submissions. Supporting documents can also be uploaded to streamline approvals.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Role-Based Approvals</h3>
+            <p>Academic Managers and HR can review, approve, or reject claims, ensuring that all submissions are accurate and complete. This system ensures accountability throughout the process.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Improve Efficiency</h3>
+            <p>Automating repetitious tasks and ensuring that key processes are intuitive helps lecturers and administrators focus on more strategic initiatives, improving overall organisational efficiency.</p>
+        </div>
+    </div>
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div class="mt-5">
+            <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Login to Access the System</a>
+        </div>
+    }
+
+
 </div>
