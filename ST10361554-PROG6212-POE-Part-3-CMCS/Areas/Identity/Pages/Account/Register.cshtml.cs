@@ -18,163 +18,350 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
 
 namespace ST10361554_PROG6212_POE_Part_3_CMCS.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<RegisterModel> logger)
         {
             _userManager = userManager;
             _userStore = userStore;
-            _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
         /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// Input Model Class for Register Page
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
+            [Display(Name = "Surname")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Phone]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
+            [Required]
+            [Display(Name = "Street Address")]
+            public string Street { get; set; }
+
+            [Required]
+            [Display(Name = "Residential Area")]
+            public string Area { get; set; }
+
+            [Required]
+            [Display(Name = "City")]
+            public string City { get; set; }
+
+            [Required]
+            [Display(Name = "Province")]
+            public string Province { get; set; }
+
+            [Required]
+            [Display(Name = "Role")]
+            public string Role { get; set; }
+
+
+            // Lecturer
+            [Display(Name = "Faculty")]
+            public string Faculty { get; set; }
+
+            [Required]
+            [Display(Name = "Module")]
+            public string Module { get; set; }
+
+            [Display(Name = "Bank Account Number")]
+            public string AccountNumber { get; set; }
+
+            [Display(Name = "Bank Name")]
+            public string BankName { get; set; }
+
+            [Display(Name = "Branch Code")]
+            public string BranchCode { get; set; }
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGetAsync(string returnUrl = null)
         {
+            ViewData["HideSidebar"] = true;
+
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+
+            bool isUserValid = true;
+
+            #region Check if Academic Manager Info is Valid
+
+            if (Input.Role == "Academic Manager")
             {
-                var user = CreateUser();
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
+                if (string.IsNullOrEmpty(Input.FirstName))
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
+                    ModelState.AddModelError(string.Empty, "First name is required.");
+                    isUserValid = false;
                 }
-                foreach (var error in result.Errors)
+
+                if (string.IsNullOrEmpty(Input.LastName))
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    ModelState.AddModelError(string.Empty, "Last name is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.PhoneNumber))
+                {
+                    ModelState.AddModelError(string.Empty, "Phone number is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Email))
+                {
+                    ModelState.AddModelError(string.Empty, "Email is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Password))
+                {
+                    ModelState.AddModelError(string.Empty, "Password is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Street))
+                {
+                    ModelState.AddModelError(string.Empty, "Street address is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Area))
+                {
+                    ModelState.AddModelError(string.Empty, "Area is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.City))
+                {
+                    ModelState.AddModelError(string.Empty, "City is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Province))
+                {
+                    ModelState.AddModelError(string.Empty, "Province is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Role))
+                {
+                    ModelState.AddModelError(string.Empty, "Role is required.");
+                    isUserValid = false;
                 }
             }
+
+            #endregion
+
+            #region Check if Lecturer Info is Valid
+
+            if (Input.Role == "Lecturer")
+            {
+                if (string.IsNullOrEmpty(Input.FirstName))
+                {
+                    ModelState.AddModelError(string.Empty, "First name is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.LastName))
+                {
+                    ModelState.AddModelError(string.Empty, "Last name is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.PhoneNumber))
+                {
+                    ModelState.AddModelError(string.Empty, "Phone number is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Email))
+                {
+                    ModelState.AddModelError(string.Empty, "Email is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Password))
+                {
+                    ModelState.AddModelError(string.Empty, "Password is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Street))
+                {
+                    ModelState.AddModelError(string.Empty, "Street address is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Area))
+                {
+                    ModelState.AddModelError(string.Empty, "Area is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.City))
+                {
+                    ModelState.AddModelError(string.Empty, "City is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Province))
+                {
+                    ModelState.AddModelError(string.Empty, "Province is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Role))
+                {
+                    ModelState.AddModelError(string.Empty, "Role is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Faculty))
+                {
+                    ModelState.AddModelError(string.Empty, "Faculty is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.Module))
+                {
+                    ModelState.AddModelError(string.Empty, "Module is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.AccountNumber))
+                {
+                    ModelState.AddModelError(string.Empty, "Account number is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.BankName))
+                {
+                    ModelState.AddModelError(string.Empty, "Bank name is required.");
+                    isUserValid = false;
+                }
+
+                if (string.IsNullOrEmpty(Input.BranchCode))
+                {
+                    ModelState.AddModelError(string.Empty, "Branch code is required.");
+                    isUserValid = false;
+                }
+            }
+
+            #endregion
+
+            if (isUserValid)
+            {
+                var user = new ApplicationUser
+                {
+                    FirstName = Input.FirstName,
+                    Surname = Input.LastName,
+                    PhoneNumber = Input.PhoneNumber,
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    StreetAddress = Input.Street,
+                    AreaAddress = Input.Area,
+                    City = Input.City,
+                    Province = Input.Province,
+                    IsLecturerApproved = false,
+                    IsManagerApproved = false
+                };
+
+                if (Input.Role.Equals("Lecturer"))
+                {
+                    user.Faculty = Input.Faculty;
+                    user.Module = Input.Module;
+                    user.AccountNumber = Input.AccountNumber;
+                    user.BankName = Input.BankName;
+                    user.BranchCode = Input.BranchCode;
+                }
+
+                return await CreateUserAsync(user, Input.Role, returnUrl);
+
+            }
+
+            ViewData["HideSidebar"] = true;
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private async Task<IActionResult> CreateUserAsync(ApplicationUser user, string role, string returnUrl)
         {
-            try
-            {
-                return Activator.CreateInstance<IdentityUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-            }
-        }
+            var result = await _userManager.CreateAsync(user, Input.Password);
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
-        {
-            if (!_userManager.SupportsUserEmail)
+            if (result.Succeeded)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                _logger.LogInformation("User created a new account with password.");
+                var roleResult = await _userManager.AddToRoleAsync(user, role);
+
+                if (roleResult.Succeeded)
+                {
+                    _logger.LogInformation($"User assigned to role '{role}'.");
+
+                    // Redirect to login page after successful registration
+                    return RedirectToPage("/Account/Login", new { area = "Identity" });
+                }
+                else
+                {
+                    foreach (var error in roleResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            ViewData["HideSidebar"] = true;
+
+            return Page(); // Return the page with errors
         }
     }
 }
