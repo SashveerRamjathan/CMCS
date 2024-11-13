@@ -1,0 +1,174 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
+@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "View Academic Manager Registrations";
+
+    var successMessage = ViewData["SuccessMessage"] as string;
+    var errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-secondary {
+        border-radius: 20px;
+    }
+
+    .btn-approve {
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-approve:hover {
+            background-color: lightgreen;
+            color: #333333;
+        }
+
+    .btn-reject {
+        background-color: #dc3545;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-reject:hover {
+            background-color: #c82333;
+            color: #ffffff;
+        }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+
+</style>
+
+<div>
+    <h1 class="display-4 mb-4">View Academic Manager Registrations</h1>
+    <p class="lead">
+        Below is the list of all academic managers who have registered. These are the accounts that are waiting to approved.
+    </p>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mb-2" role="alert">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <p class="lead">
+            No Academic Managers found.
+        </p>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var manager in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@($"{manager.FirstName} {manager.Surname}")</h5>
+                            <p class="card-text"><strong>Email:</strong> @manager.Email</p>
+                            <p class="card-text"><strong>Phone:</strong> @manager.PhoneNumber</p>
+                            <a href="#" class="btn btn-approve" data-bs-toggle="modal" data-bs-target="#managerModal-@manager.Id">
+                                Verify
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lecturer Modal -->
+                <div class="modal fade" id="managerModal-@manager.Id" tabindex="-1" aria-labelledby="managerModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="managerModalLabel">Verify Academic Manager</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>ID:</strong> @manager.Id</p>
+                                <p><strong>Name:</strong> @($"{manager.FirstName} {manager.Surname}")</p>
+                                <p><strong>Email:</strong> @manager.Email</p>
+                                <p><strong>Phone:</strong> @manager.PhoneNumber</p>
+                                <hr>
+                                <h5>Address</h5>
+                                <p>
+                                    @manager.StreetAddress<br />
+                                    @manager.AreaAddress<br />
+                                    @manager.City<br />
+                                    @manager.Province
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+
+                                <form asp-action="ApproveAcademicManagerRegistration" method="post">
+                                    <input type="hidden" name="id" value="@manager.Id" />
+                                    <button type="submit" class="btn btn-approve">Approve</button>
+                                </form>
+
+                                <form asp-action="RejectAcademicManagerRegistration" method="post">
+                                    <input type="hidden" name="id" value="@manager.Id" />
+                                    <button type="submit" class="btn btn-reject">Reject</button>
+                                </form>
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

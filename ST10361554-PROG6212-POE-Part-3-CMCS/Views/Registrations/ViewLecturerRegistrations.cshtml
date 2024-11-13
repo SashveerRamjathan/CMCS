@@ -1,0 +1,186 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
+@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "View Lecturer Registrations";
+
+    var successMessage = ViewData["SuccessMessage"] as string;
+    var errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-secondary {
+        border-radius: 20px;
+    }
+
+    .btn-approve {
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-approve:hover {
+            background-color: lightgreen;
+            color: #333333;
+        }
+
+    .btn-reject {
+        background-color: #dc3545;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-reject:hover {
+            background-color: #c82333;
+            color: #ffffff;
+        }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+
+</style>
+
+<div>
+    <h1 class="display-4 mb-4">View Lecturer Registrations</h1>
+    <p class="lead">
+        Below is the list of all lecturers who have registered. These are the accounts that are waiting to approved.
+    </p>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mb-2" role="alert">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <p class="lead">
+            No lecturers found.
+        </p>
+    }
+    else
+    {
+        <div class="row">
+
+            @foreach (var lecturer in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@($"{lecturer.FirstName} {lecturer.Surname}")</h5>
+                            <p class="card-text"><strong>Faculty:</strong> @lecturer.Faculty</p>
+                            <p class="card-text"><strong>Module:</strong> @lecturer.Module</p>
+                            <p class="card-text"><strong>Email:</strong> @lecturer.Email</p>
+                            <p class="card-text"><strong>Phone:</strong> @lecturer.PhoneNumber</p>
+                            <a href="#" class="btn btn-approve" data-bs-toggle="modal" data-bs-target="#lecturerModal-@lecturer.Id">
+                                Verify
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lecturer Modal -->
+                <div class="modal fade" id="lecturerModal-@lecturer.Id" tabindex="-1" aria-labelledby="lecturerModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="lecturerModalLabel">Verify Lecturer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>ID:</strong> @lecturer.Id</p>
+                                <p><strong>Name:</strong> @($"{lecturer.FirstName} {lecturer.Surname}")</p>
+
+                                <p><strong>Faculty:</strong> @lecturer.Faculty</p>
+                                <p><strong>Module:</strong> @lecturer.Module</p>
+                                <p><strong>Email:</strong> @lecturer.Email</p>
+                                <p><strong>Phone:</strong> @lecturer.PhoneNumber</p>
+                                <hr>
+                                <h5>Address</h5>
+                                <p>
+                                    @lecturer.StreetAddress<br />
+                                    @lecturer.AreaAddress<br />
+                                    @lecturer.City<br />
+                                    @lecturer.Province
+                                </p>
+                                <hr>
+                                <h5>Account Details</h5>
+                                <p>
+                                    <strong> Bank Name: </strong> @lecturer.BankName<br />
+                                    <strong> Account Number: </strong> @lecturer.AccountNumber<br />
+                                    <strong> Branch Code: </strong> @lecturer.BranchCode
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+
+                                <form asp-action="ApproveLecturerRegistration" method="post">
+                                    <input type="hidden" name="id" value="@lecturer.Id" />
+                                    <button type="submit" class="btn btn-approve">Approve</button>
+                                </form>
+
+                                <form asp-action="RejectLecturerRegistration" method="post">
+                                    <input type="hidden" name="id" value="@lecturer.Id" />
+                                    <button type="submit" class="btn btn-reject">Reject</button>
+                                </form>
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
