@@ -1,0 +1,154 @@
+﻿@model ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels.SubmitClaimViewModel
+
+@{
+    ViewData["Title"] = "Submit New Claim";
+}
+
+<style>
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-submit {
+        border-radius: 20px;
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: lightgreen;
+            color: #ffffff;
+        }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Submit a New Claim</h1>
+    <p class="lead">Fill out the form below to submit a new claim.</p>
+
+    <form id="claimForm" asp-action="SubmitClaim" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="ClaimName" class="form-label"></label>
+            <input asp-for="ClaimName" type="text" class="form-control" id="claimName" name="ClaimName" required>
+            <span asp-validation-for="ClaimName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ClaimDate" class="form-label"></label>
+            <input asp-for="ClaimDate" type="date" class="form-control" id="claimDate" name="ClaimDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" required>
+            <span asp-validation-for="ClaimDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ClaimDescription" class="form-label"></label>
+            <textarea asp-for="ClaimDescription" class="form-control" id="claimDescription" name="ClaimDescription" rows="3" required></textarea>
+            <span asp-validation-for="ClaimDescription" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="HoursWorked" class="form-label"></label>
+            <input asp-for="HoursWorked" type="number" class="form-control" id="hoursWorked" name="HoursWorked" min="0" step="0.1"
+                   required oninput="calculateFinalAmount()">
+            <span asp-validation-for="HoursWorked" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="HourlyRate" class="form-label"></label>
+            <input asp-for="HourlyRate" type="number" class="form-control" id="hourlyRate" name="HourlyRate" min="0" step="0.01"
+                   required oninput="calculateFinalAmount()">
+            <span asp-validation-for="HourlyRate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FinalAmount" class="form-label"></label>
+            <input asp-for="FinalAmount" type="text" class="form-control" id="finalAmount" name="FinalAmount" readonly>
+            <span asp-validation-for="FinalAmount" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Document" class="form-label"></label>
+            <input asp-for="Document" type="file" class="form-control" id="supportingDocument" name="Document"
+                   required accept=".pdf,.docx,.xlsx">
+            <span asp-validation-for="Document" class="text-danger"></span>
+        </div>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#claimModal">
+            Confirm
+        </button>
+    </form>
+</div>
+
+<!-- Modal for Confirming Claim -->
+<div class="modal fade" id="claimModal" tabindex="-1" aria-labelledby="claimModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="claimModalLabel">Confirm Claim Submission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Claim Id:</strong> @Model.Id</p>
+                <p><strong>Claim Name:</strong> <span id="modalClaimName"></span></p>
+                <p><strong>Claim Date:</strong> <span id="modalClaimDate"></span></p>
+                <p><strong>Claim Description:</strong> <span id="modalClaimDescription"></span></p>
+                <p><strong>Hours Worked:</strong> <span id="modalHoursWorked"></span></p>
+                <p><strong>Hourly Rate:</strong> <span id="modalHourlyRate"></span></p>
+                <p><strong>Final Amount:</strong> <span id="modalFinalAmount"></span></p>
+                <p><strong>Uploaded Document:</strong> <span id="modalDocumentName"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-submit" onclick="submitForm()">Submit Claim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Calculate final amount based on hours worked and hourly rate
+        function calculateFinalAmount() {
+            const hoursWorked = parseFloat(document.getElementById('hoursWorked').value) || 0;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const finalAmount = (hoursWorked * hourlyRate).toFixed(2);
+            document.getElementById('finalAmount').value = finalAmount;
+        }
+
+        // Update modal with form data
+        document.querySelector('#claimForm').addEventListener('input', function () {
+            document.getElementById('modalClaimName').innerText = document.getElementById('claimName').value;
+            document.getElementById('modalClaimDate').innerText = document.getElementById('claimDate').value;
+            document.getElementById('modalClaimDescription').innerText = document.getElementById('claimDescription').value;
+            document.getElementById('modalHoursWorked').innerText = document.getElementById('hoursWorked').value;
+            document.getElementById('modalHourlyRate').innerText = document.getElementById('hourlyRate').value;
+            document.getElementById('modalFinalAmount').innerText = document.getElementById('finalAmount').value;
+            const fileInput = document.getElementById('supportingDocument');
+            document.getElementById('modalDocumentName').innerText = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+        });
+
+        // Submit form after modal confirmation
+        function submitForm() {
+            document.getElementById('claimForm').submit();
+        }
+
+    </script>
+}
+

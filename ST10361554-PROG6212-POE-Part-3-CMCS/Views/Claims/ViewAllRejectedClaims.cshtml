@@ -1,0 +1,135 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
+@model List<Claim>
+
+@{
+    ViewData["Title"] = "View Rejected Claims";
+    string? successMessage = ViewData["SuccessMessage"] as string;
+    string? errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-secondary {
+        border-radius: 20px;
+        background-color: #dc3545;
+    }
+
+        .btn-secondary:hover {
+            background-color: #ff0000;
+        }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px red;
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+
+</style>
+
+<h1 class="display-4 mb-4">View Rejected Claims</h1>
+<p class="lead">Below is the list of all rejected claims.</p>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mb-2" role="alert">
+        @successMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mb-2" role="alert">
+        @errorMessage
+    </div>
+}
+
+<div>
+    @if (Model == null || Model.Count == 0)
+    {
+        <p>No claims to display at the moment</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var claim in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card p-3">
+                        <h5>Claim ID: @claim.Id</h5>
+                        <p>Lecturer: @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+                        <p>Faculty: @claim.User.Faculty</p>
+                        <p>Module: @claim.User.Module</p>
+                        <p>Final Amount: R @claim.FinalAmount</p>
+                        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#claimModal-@claim.Id">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Modal for Claim Details (Inside foreach loop) -->
+                <div class="modal fade" id="claimModal-@claim.Id" tabindex="-1" aria-labelledby="claimModalLabel-@claim.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="claimModalLabel-@claim.Id">Claim Details - @claim.ClaimName</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p><strong>Claim ID:</strong> @claim.Id</p>
+                                <p><strong>Claim Name:</strong> @claim.ClaimName</p>
+                                <p><strong>Claim Date:</strong> @claim.ClaimDate.ToString("D")</p>
+                                <hr />
+                                <p><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+                                <p><strong>Faculty:</strong> @claim.User.Faculty</p>
+                                <p><strong>Module:</strong> @claim.User.Module</p>
+                                <hr />
+                                <p><strong>Description:</strong> @claim.ClaimDescription</p>
+                                <p><strong>Hours Worked:</strong> @claim.HoursWorked</p>
+                                <p><strong>Hourly Rate:</strong> R @claim.HourlyRate</p>
+                                <p><strong>Total:</strong> R @claim.FinalAmount</p>
+                                <hr />
+                                <p><strong>Supporting Documents:</strong></p>
+                                <ul>
+                                    <li>
+                                        <a asp-area="" asp-action="DownloadSupportingDocument" asp-route-id="@claim.Id">@claim.DocumentName</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

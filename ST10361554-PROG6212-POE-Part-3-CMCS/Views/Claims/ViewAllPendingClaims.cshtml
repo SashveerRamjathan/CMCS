@@ -1,0 +1,184 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
+@model List<Claim>
+
+@{
+	ViewData["Title"] = "Track Claim Status";
+	string? successMessage = ViewData["SuccessMessage"] as string;
+	string? errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+	.btn-primary {
+		border-radius: 20px;
+		background-color: #f46516;
+		color: #ffffff;
+		border: none;
+	}
+
+		.btn-primary:hover {
+			background-color: #0a9d9b;
+			color: #ffffff;
+		}
+
+	.btn-approve {
+		background-color: #28a745;
+		color: #ffffff;
+		border: none;
+		border-radius: 20px;
+	}
+
+		.btn-approve:hover {
+			background-color: lightgreen;
+			color: #333333;
+		}
+
+	.btn-reject {
+		background-color: #dc3545;
+		color: #ffffff;
+		border: none;
+		border-radius: 20px;
+	}
+
+		.btn-reject:hover {
+			background-color: #c82333;
+			color: #ffffff;
+		}
+
+	.card {
+		background-color: #ffffff;
+		border: none;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+	}
+
+		.card:hover {
+			transform: scale(1.05);
+			box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+		}
+
+		.card h5 {
+			color: #f46516;
+		}
+
+	.modal-header {
+		background-color: #f46516;
+		color: white;
+	}
+
+</style>
+
+<h1 class="display-4 mb-4">View All Pending Claims</h1>
+<p class="lead">
+	Below is the list of all pending claims. You can verify each claim for approval or
+	rejection.
+</p>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+	<div class="alert alert-success mb-2" role="alert">
+		@successMessage
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger mb-2" role="alert">
+		@errorMessage
+	</div>
+}
+
+@if (ViewBag.Faculties != null)
+{
+	<!-- Filter by Department -->
+	<form method="get" asp-action="ViewAllPendingClaims">
+		<div class="input-group mb-3">
+			<label class="input-group-text" for="faculty">Filter by Faculty</label>
+			<select class="form-select" id="faculty" name="faculty">
+				<option value="">All Faculties</option>
+				@foreach (var faculty in ViewBag.Faculties)
+				{
+					<option value="@faculty">@faculty</option>
+				}
+			</select>
+			<button type="submit" class="btn btn-primary">Filter</button>
+		</div>
+	</form>
+}
+
+<div>
+	@if (Model == null || Model.Count == 0)
+	{
+		<p>No claims to display at the moment</p>
+	}
+	else
+	{
+		<div class="row">
+
+			@foreach (var claim in Model)
+			{
+				<div class="col-md-4 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Claim ID: @claim.Id</h5>
+							<p class="card-text"><strong>Claim Name: @claim.ClaimName</strong> </p>
+							<p class="card-text"><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+							<p class="card-text"><strong>Faculty:</strong> @claim.User.Faculty</p>
+							<p class="card-text"><strong>Date:</strong> @claim.ClaimDate.ToString("D")</p>
+							<p class="card-text"><strong>Total:</strong> R @claim.FinalAmount</p>
+							<a href="#" class="btn btn-approve" data-bs-toggle="modal" data-bs-target="#claimModal-@claim.Id">
+								Verify Claim
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal for Claim Details (Inside foreach loop) -->
+				<div class="modal fade" id="claimModal-@claim.Id" tabindex="-1" aria-labelledby="claimModalLabel-@claim.Id" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="claimModalLabel-@claim.Id">Claim Details - @claim.ClaimName</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<p><strong>Claim ID:</strong> @claim.Id</p>
+								<p><strong>Claim Name:</strong> @claim.ClaimName</p>
+								<p><strong>Claim Date:</strong> @claim.ClaimDate.ToString("D")</p>
+								<hr />
+								<p><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+								<p><strong>Faculty:</strong> @claim.User.Faculty</p>
+								<p><strong>Module:</strong> @claim.User.Module</p>
+								<hr />
+								<p><strong>Description:</strong> @claim.ClaimDescription</p>
+								<p><strong>Hours Worked:</strong> @claim.HoursWorked</p>
+								<p><strong>Hourly Rate:</strong> R @claim.HourlyRate</p>
+								<p><strong>Total:</strong> R @claim.FinalAmount</p>
+								<hr />
+								<p><strong>Supporting Documents:</strong></p>
+								<ul>
+									<li>
+										<a asp-area="" asp-action="DownloadSupportingDocument" asp-route-id="@claim.Id">@claim.DocumentName</a>
+									</li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+								<form method="post" asp-action="ApproveClaim">
+									<input name="id" type="hidden" value="@claim.Id" />
+									<button type="submit" class="btn btn-approve">Approve</button>
+								</form>
+								<form method="post" asp-action="RejectClaim">
+									<input name="id" type="hidden" value="@claim.Id" />
+									<button type="submit" class="btn btn-reject">Reject</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+
+		</div>
+	}
+</div>
