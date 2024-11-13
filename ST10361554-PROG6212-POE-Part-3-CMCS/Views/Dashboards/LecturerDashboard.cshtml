@@ -1,0 +1,147 @@
+﻿@model ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels.LecturerUserViewModel
+
+@{
+    ViewData["Title"] = "Lecturer Dashboard";
+}
+
+<style>
+    /* Card styling */
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        /* Orange button */
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            /* Cyan hover effect for buttons */
+            color: #ffffff;
+        }
+
+    .btn-warning {
+        border-radius: 20px;
+        border: none;
+    }
+
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Home</h1>
+    <p class="lead">
+        Welcome to the Contract Monthly Claim System. You can submit, track, and manage your claims
+        efficiently from this dashboard.
+    </p>
+
+    <div class="row">
+        <!-- Submit Claim -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Submit a New Claim</h5>
+                    <p class="card-text">Click the button below to submit a new claim.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="SubmitClaim" class="btn btn-primary">
+                        Submit
+                        Claim
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Track Claim Status -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Track Claim Status</h5>
+                    <p class="card-text">Check the status of your previous claims here.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="TrackClaimStatus" class="btn btn-primary">
+                        View Claim
+                        Status
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Section Below Cards -->
+
+    <div class="row">
+        <!-- Announcements Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Latest Announcements</h5>
+                    <ul>
+                        <li>
+                            <strong>Submission Deadline:</strong> All claims must be submitted by the 25th of each
+                            month.
+                        </li>
+                        <li>
+                            <strong>System Maintenance:</strong> The system will undergo maintenance on the 1st of next
+                            month.
+                        </li>
+                        <li>
+                            <strong>New Features:</strong> A new claim tool is now available under 'Track
+                            Claim Status'.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support/Help Section -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Need Help?</h5>
+                    <p>If you encounter any issues, please reach out to our support team.</p>
+                    <p>Email: <a href="mailto:support@cmcs.com">support@cmcs.com</a></p>
+                    <p>Phone: +27 123 456 7890</p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model != null)
+        {
+            <!-- Lecturer Details Section -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Lecturer Details</h5>
+                            <p class="card-text">
+                                <strong>First Name:</strong> @Model.FirstName<br>
+                                <strong>Surname:</strong> @Model.Surname<br>
+                                <strong>Email:</strong> @Model.Email<br>
+                                <strong>Phone:</strong> @Model.PhoneNumber<br>
+                                <strong>Faculty:</strong> @Model.Faculty<br>
+                                <strong>Module:</strong> @Model.Module
+                            </p>
+                            <a asp-area="" asp-controller="Staff" asp-action="UpdateLecturerPersonalDetails" class="btn btn-warning" asp-route-id="@Model.Id">Update Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,140 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model UpdateAcademicManagerViewModel
+
+@{
+    ViewData["Title"] = "Academic Manager Dashboard";
+}
+
+<style>
+    /* Card styling */
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        /* Orange button */
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            /* Cyan hover effect for buttons */
+            color: #ffffff;
+        }
+
+    .btn-warning {
+        border-radius: 20px;
+        border: none;
+    }
+
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Home</h1>
+    <p class="lead">
+        Welcome to the Academic Manager Dashboard. Use the options on the left to manage
+        lecturer accounts and view all claims.
+    </p>
+
+    <div class="row">
+        <!-- View All Lecturers -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View All Lecturers</h5>
+                    <p class="card-text">View and manage all lecturer accounts here.</p>
+                    <a asp-area="" asp-controller="Staff" asp-action="ViewAllLecturers" class="btn btn-primary">
+                        View
+                        Lecturers
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View All Claims -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View All Claims</h5>
+                    <p class="card-text">Access and review all claims submitted by lecturers.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="ViewAllPendingClaims" class="btn btn-primary">
+                        View
+                        Claims
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Lecturer Registrations -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View Lecturer Registrations</h5>
+                    <p class="card-text">
+                        Manage lecturer registrations and review new registration requests.
+                    </p>
+                    <a asp-area="" asp-controller="Registrations" asp-action="GetAllPendingLecturers" class="btn btn-primary">View Lecturer Registrations</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <!-- Statistics Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Dashboard Statistics</h5>
+                    <p class="card-text">
+                        Track the number of claims processed, lecturers registered, and
+                        more.
+                    </p>
+                    <ul>
+                        <li><strong>Total Claims:</strong> @ViewData["TotalClaims"]</li>
+                        <li><strong>Total Lecturers:</strong> @ViewData["TotalLecturers"]</li>
+                        <li><strong>Pending Lecturer Registrations:</strong> @ViewData["PendingLecturers"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        <!-- Lecturer Details Section -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Academic Manager Details</h5>
+                        <p class="card-text">
+                            <strong>First Name:</strong> @Model.FirstName<br>
+                            <strong>Surname:</strong> @Model.Surname<br>
+                            <strong>Email:</strong> @Model.Email<br>
+                            <strong>Phone:</strong> @Model.PhoneNumber<br>
+                        </p>
+                        <a asp-area="" asp-controller="Staff" asp-action="UpdateAcademicManagerDetails" class="btn btn-warning" asp-route-id="@Model.Id">Update Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

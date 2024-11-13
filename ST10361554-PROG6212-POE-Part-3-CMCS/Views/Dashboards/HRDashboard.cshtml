@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "HR Dashboard";
+}
+
+<style>
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">HR Dashboard</h1>
+    <p class="lead">
+        Welcome to the HR Dashboard. Use the options on the left to manage staff, view claims,
+        generate reports, and more.
+    </p>
+
+    <div class="row">
+        <!-- View All Staff -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View All Staff</h5>
+                    <p class="card-text">View and manage all staff accounts here.</p>
+                    <a asp-area="" asp-controller="Staff" asp-action="ViewAllStaff" class="btn btn-primary">View Staff</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View All Claims -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View All Pending Claims</h5>
+                    <p class="card-text">Access and review all pending claims.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="ViewAllPendingClaims" class="btn btn-primary">View Claims</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Claim Statistics Report -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm disabled">
+                <div class="card-body disabled">
+                    <h5 class="card-title">Generate Claim Statistics Report</h5>
+                    <p class="card-text">Generate detailed reports on claim statistics and trends.</p>
+                    <a asp-area="" asp-controller="" asp-action="" class="btn btn-primary disabled">Coming Soon!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- View Accepted Claims -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View Accepted Claims</h5>
+                    <p class="card-text">Review all accepted claims here.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="ViewAllApprovedClaims" class="btn btn-primary">View Approved Claims</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Rejected Claims -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">View Rejected Claims</h5>
+                    <p class="card-text">Review all rejected claims here.</p>
+                    <a asp-area="" asp-controller="Claims" asp-action="ViewAllRejectedClaims" class="btn btn-primary">View Rejected Claims</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Claim Invoices -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm disabled">
+                <div class="card-body disabled">
+                    <h5 class="card-title">Generate Claim Invoices</h5>
+                    <p class="card-text">Generate invoices for processed claims.</p>
+                    <a asp-area="" asp-controller="" asp-action="" class="btn btn-primary disabled">Coming Soon!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Statistics</h5>
+                    <ul>
+                        <li><strong>Total Claims:</strong> @ViewData["TotalClaims"]</li>
+                        <li><strong>Accepted Claims:</strong> @ViewData["ApprovedClaims"]</li>
+                        <li><strong>Rejected Claims:</strong> @ViewData["RejectedClaims"]</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
