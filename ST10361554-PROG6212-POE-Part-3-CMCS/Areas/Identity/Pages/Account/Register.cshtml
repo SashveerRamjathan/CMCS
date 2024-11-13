@@ -1,67 +1,280 @@
 ﻿@page
 @model RegisterModel
+
 @{
-    ViewData["Title"] = "Register";
+	ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+
+	.register-container {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 20px;
+	}
+
+	.register-card {
+		background-color: #ffffff;
+		border-radius: 10px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+		padding: 40px;
+		max-width: 600px;
+		width: 100%;
+	}
+
+		.register-card h2 {
+			color: #333333;
+			margin-bottom: 10px;
+			text-align: center;
+		}
+
+		.register-card p {
+			color: #555555;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+
+		.register-card .form-group {
+			margin-bottom: 15px;
+		}
+
+		.register-card .form-control {
+			border-radius: 5px;
+			border-color: #dcdcdc;
+		}
+
+			.register-card .form-control:focus {
+				border-color: #f46516;
+				box-shadow: 0 0 0 0.2rem rgba(244, 101, 22, 0.25);
+			}
+
+		.register-card .btn-primary {
+			background-color: #f46516;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+			.register-card .btn-primary:hover {
+				background-color: #0a9d9b;
+			}
+
+		.register-card .btn-secondary {
+			background-color: #0a9d9b;
+			border: none;
+			border-radius: 5px;
+			padding: 10px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+			.register-card .btn-secondary:hover {
+				background-color: #f46516;
+		}
+
+		.register-card .login-link {
+			margin-top: 15px;
+			color: #0a9d9b;
+			display: block;
+			text-align: center;
+		}
+
+		.register-card .login-link:hover {
+			color: #f46516;
+		}
+
+	fieldset {
+		border: 1px solid #f46516;
+		border-radius: 5px;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+	legend {
+		padding: 0 10px;
+		font-size: 1.2em;
+		color: #f46516;
+	}
+
+
+
+</style>
+
+<!-- Main Content -->
+<div class="register-container">
+	<div class="register-card">
+		<h2>Create Your Account</h2>
+		<p>Fill in the details to register</p>
+		<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+			<!-- Personal Details -->
+			<fieldset>
+				<legend>Personal Details</legend>
+				<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.FirstName" class="form-label">First Name</label>
+					<input asp-for="Input.FirstName" class="form-control" required />
+					<span asp-validation-for="Input.FirstName" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.LastName" class="form-label">Surname</label>
+					<input asp-for="Input.LastName" class="form-control" required />
+					<span asp-validation-for="Input.LastName" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.PhoneNumber" class="form-label">Phone Number</label>
+					<input asp-for="Input.PhoneNumber" class="form-control" required />
+					<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Email" class="form-label">Email</label>
+					<input asp-for="Input.Email" class="form-control" required />
+					<span asp-validation-for="Input.Email" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Password" class="form-label">Password</label>
+					<div class="input-group">
+						<input asp-for="Input.Password" class="form-control" required />
+						<div class="input-group-append">
+							<button type="button" id="togglePassword" class="btn btn-secondary" onclick="togglePasswordVisibility()">Show</button>
+						</div>
+					</div>
+					<span asp-validation-for="Input.Password" class="text-danger"></span>
+				</div>
+
+			</fieldset>
+
+			<!-- Address Details -->
+			<fieldset>
+				<legend>Address Details</legend>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Street" class="form-label">Street Address</label>
+					<input asp-for="Input.Street" class="form-control" required />
+					<span asp-validation-for="Input.Street" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Area" class="form-label">Residential Area</label>
+					<input asp-for="Input.Area" class="form-control" required />
+					<span asp-validation-for="Input.Area" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.City" class="form-label">City</label>
+					<input asp-for="Input.City" class="form-control" required />
+					<span asp-validation-for="Input.City" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Province" class="form-label">Province</label>
+					<input asp-for="Input.Province" class="form-control" required />
+					<span asp-validation-for="Input.Province" class="text-danger"></span>
+				</div>
+			</fieldset>
+
+			<!-- Role Selection -->
+			<fieldset>
+				<legend>Role Selection</legend>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Role" class="form-label">Register As</label>
+					<select id="role" asp-for="Input.Role" class="form-control" required>
+						<option value="">Select your role</option>
+						<option value="Lecturer">Lecturer</option>
+						<option value="Academic Manager">Academic Manager</option>
+					</select>
+					<span asp-validation-for="Input.Role" class="text-danger"></span>
+				</div>
+			</fieldset>
+
+			<!-- Additional Fields for Lecturer -->
+			<fieldset id="lecturerFields" class="extra-fields">
+				<legend>Course Information</legend>
+				<div class="form-group">
+					<label asp-for="Input.Faculty" class="form-label">Faculty</label>
+					<select asp-for="Input.Faculty" class="form-select">
+						<option value="">Select Faculty</option>
+						<option value="Computer Science">Computer Science</option>
+						<option value="Finance">Finance</option>
+						<option value="Law">Law</option>
+						<option value="Arts and Humanities">Arts and Humanities</option>
+						<option value="Education">Education</option>
+						<option value="Psychology">Psychology</option>
+					</select>
+					<span asp-validation-for="Input.Faculty" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.Module" class="form-label">Module</label>
+					<input asp-for="Input.Module" class="form-control" />
+					<span asp-validation-for="Input.Module" class="text-danger"></span>
+				</div>
+			</fieldset>
+
+			<!-- Banking Details for Lecturer -->
+			<fieldset id="bankingDetails" class="extra-fields">
+				<legend>Banking Details</legend>
+				<div class="form-group mb-3">
+					<label asp-for="Input.AccountNumber" class="form-label">Account Number</label>
+					<input asp-for="Input.AccountNumber" class="form-control" />
+					<span asp-validation-for="Input.AccountNumber" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.BankName" class="form-label">Bank Name</label>
+					<input asp-for="Input.BankName" class="form-control" />
+					<span asp-validation-for="Input.Module" class="text-danger"></span>
+				</div>
+				<div class="form-group mb-3">
+					<label asp-for="Input.BranchCode" class="form-label">Branch Code</label>
+					<input asp-for="Input.BranchCode" class="form-control" />
+					<span asp-validation-for="Input.BranchCode" class="text-danger"></span>
+				</div>
+			</fieldset>
+
+			<!-- Submit Button -->
+			<button type="submit" class="btn btn-primary w-100">Register</button>
+			<a asp-page="Login" class="login-link mt-3 d-block text-center">Already have an account? Login here</a>
+		</form>
+	</div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
+
+	<script>
+		// JavaScript to show/hide additional fields based on role selection
+		document.getElementById('role').addEventListener('change', function () {
+			const lecturerFields = document.getElementById('lecturerFields');
+			const bankingDetails = document.getElementById('bankingDetails');
+			if (this.value === 'Lecturer') {
+				lecturerFields.style.display = 'block';
+				bankingDetails.style.display = 'block';
+			} else {
+				lecturerFields.style.display = 'none';
+				bankingDetails.style.display = 'none';
+			}
+		});
+
+		// Hide fields by default on page load
+		window.addEventListener('DOMContentLoaded', function () {
+			document.getElementById('lecturerFields').style.display = 'none';
+			document.getElementById('bankingDetails').style.display = 'none';
+		});
+	</script>
+
+	<script>
+		// Function to toggle password visibility
+		function togglePasswordVisibility() {
+			var passwordInput = document.getElementById("Input_Password");
+			var toggleButton = document.getElementById("togglePassword");
+
+			if (passwordInput.type === "password") {
+				passwordInput.type = "text";
+				toggleButton.textContent = "Hide";
+			} else {
+				passwordInput.type = "password";
+				toggleButton.textContent = "Show";
+			}
+		}
+	</script>
 }
