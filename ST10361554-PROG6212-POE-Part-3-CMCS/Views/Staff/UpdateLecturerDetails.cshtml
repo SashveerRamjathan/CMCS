@@ -1,0 +1,240 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model UpdateLecturerUserViewModel
+
+@{
+    ViewData["Title"] = "Update Lecturer Details";
+
+    string? successMessage = ViewData["SuccessMessage"] as string;
+    string? errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-success:hover {
+            background-color: lightgreen;
+            color: #ffffff;
+        }
+
+    .btn-danger {
+        border-radius: 20px;
+    }
+
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Update Lecturer Information</h1>
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mb-2" role="alert">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    <form id="lecturerForm" asp-action="UpdateLecturerDetailsByManager" method="post">
+        <fieldset class="mb-4">
+            <input type="hidden" asp-for="Id" />
+            <legend>Personal Information</legend>
+            <div class="mb-3">
+                <label for="lecturerFirstName" class="form-label">First Name:</label>
+                <input asp-for="FirstName" type="text" class="form-control" id="lecturerFirstName" name="FirstName" required>
+            </div>
+            <div class="mb-3">
+                <label for="lecturerSurname" class="form-label">Surname</label>
+                <input asp-for="Surname" type="text" class="form-control" id="lecturerSurname" name="Surname" required>
+            </div>
+            <div class="mb-3">
+                <label for="lecturerEmail" class="form-label">Email</label>
+                <input asp-for="Email" type="email" class="form-control" id="lecturerEmail" name="Email" required>
+            </div>
+            <div class="mb-3">
+                <label for="lecturerPhone" class="form-label">Phone</label>
+                <input asp-for="PhoneNumber" type="tel" class="form-control" id="lecturerPhone" name="PhoneNumber" required>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-4">
+            <legend>Faculty and Module</legend>
+            <div class="mb-3">
+                <label for="lecturerDepartment" class="form-label">Faculty (Current: @Model.Faculty)</label>
+                <select asp-for="Faculty" class="form-select" id="lecturerDepartment" name="Faculty" required>
+                    <option value="">Select Department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Law">Law</option>
+                    <option value="Arts and Humanities">Arts and Humanities</option>
+                    <option value="Education">Education</option>
+                    <option value="Psychology">Psychology</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="lecturerModule" class="form-label">Module</label>
+                <input asp-for="Module" type="text" class="form-control" id="lecturerModule" name="Module" required>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-4">
+            <legend>Address</legend>
+            <div class="mb-3">
+                <label for="street">Street Address</label>
+                <input asp-for="StreetAddress" type="text" class="form-control" id="street" name="StreetAddress" required>
+            </div>
+            <div class="mb-3">
+                <label for="area">Residential Area</label>
+                <input asp-for="AreaAddress" type="text" class="form-control" id="area" name="AreaAddress" required>
+            </div>
+            <div class="mb-3">
+                <label for="city">City</label>
+                <input asp-for="City" type="text" class="form-control" id="city" name="City" required>
+            </div>
+            <div class="mb-3">
+                <label for="province">Province</label>
+                <input asp-for="Province" type="text" class="form-control" id="province" name="Province" required>
+            </div>
+        </fieldset>
+
+        <fieldset class="mb-4">
+            <legend>Banking Details</legend>
+            <div class="mb-3">
+                <label for="lecturerAccountNumber" class="form-label">Account Number</label>
+                <input asp-for="AccountNumber" type="text" class="form-control" id="lecturerAccountNumber" name="AccountNumber" required>
+            </div>
+            <div class="mb-3">
+                <label for="lecturerBank" class="form-label">Bank</label>
+                <input asp-for="BankName" type="text" class="form-control" id="lecturerBank" name="BankName" required>
+            </div>
+            <div class="mb-3">
+                <label for="branchCode" class="form-label">Branch Code</label>
+                <input asp-for="BranchCode" type="text" class="form-control" id="branchCode" name="BranchCode" required>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="btn btn-success" id="submitButton">Update Lecturer Information</button>
+    </form>
+
+</div>
+
+<!-- Modal HTML -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirm Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please review the information below before confirming:</p>
+                <ul id="modalContent" class="list-unstyled">
+                    <!-- Content will be populated dynamically -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        // Get the form element
+        const form = document.getElementById('lecturerForm');
+
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            // Prevent default submission to allow modal confirmation
+            event.preventDefault();
+
+            // Get form values
+            const lecturerFirstName = document.getElementById('lecturerFirstName').value;
+            const lecturerSurname = document.getElementById('lecturerSurname').value;
+            const lecturerEmail = document.getElementById('lecturerEmail').value;
+            const lecturerPhone = document.getElementById('lecturerPhone').value;
+
+            const lecturerDepartment = document.getElementById('lecturerDepartment').value;
+            const lecturerModule = document.getElementById('lecturerModule').value;
+
+            const street = document.getElementById('street').value;
+            const area = document.getElementById('area').value;
+            const city = document.getElementById('city').value;
+            const province = document.getElementById('province').value;
+
+            const lecturerAccountNumber = document.getElementById('lecturerAccountNumber').value;
+            const lecturerBank = document.getElementById('lecturerBank').value;
+            const lecturerBranchCode = document.getElementById('branchCode').value;
+
+            // Populate modal content
+            const modalContent = `
+                        <li><strong>First Name:</strong> ${lecturerFirstName}</li>
+                        <li><strong>Surname:</strong> ${lecturerSurname}</li>
+                        <li><strong>Email:</strong> ${lecturerEmail}</li>
+                        <li><strong>Phone:</strong> ${lecturerPhone}</li>
+                        <hr>
+                        <li><strong>Faculty:</strong> ${lecturerDepartment}</li>
+                        <li><strong>Module:</strong> ${lecturerModule}</li>
+                        <hr>
+                        <li><strong>Street Address:</strong> ${street}</li>
+                        <li><strong>Residential Area:</strong> ${area}</li>
+                        <li><strong>City:</strong> ${city}</li>
+                        <li><strong>Province:</strong> ${province}</li>
+                        <hr>
+                        <li><strong>Account Number:</strong> ${lecturerAccountNumber}</li>
+                        <li><strong>Bank:</strong> ${lecturerBank}</li>
+                        <li><strong>Branch Code:</strong> ${lecturerBranchCode}</li>
+                    `;
+            document.getElementById('modalContent').innerHTML = modalContent;
+
+            // Show modal
+            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            confirmationModal.show();
+        });
+
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            // Check the validity of the form
+            if (form.checkValidity()) {
+                // Disable the buttons to prevent multiple submissions
+                document.getElementById('confirmButton').disabled = true;
+                document.getElementById('submitButton').disabled = true; // Disable original submit button
+                // Submit the form
+                form.submit();
+            } else {
+                // Show the form validation message
+                form.reportValidity();
+            }
+        });
+    </script>
+}
+

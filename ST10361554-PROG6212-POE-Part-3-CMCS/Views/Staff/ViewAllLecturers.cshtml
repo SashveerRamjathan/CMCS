@@ -1,0 +1,261 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model List<LecturerUserViewModel>
+
+@{
+    ViewData["Title"] = "View All Lecturers";
+
+    var successMessage = ViewData["SuccessMessage"] as string;
+    var errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            color: #ffffff;
+        }
+
+    .btn-update {
+        background-color: #ffc107;
+        /* Yellow */
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-update:hover {
+            background-color: #e0e0e0;
+            /* Light gray */
+            color: #333333;
+        }
+
+    .btn-remove {
+        background-color: #dc3545;
+        /* Red */
+        color: #ffffff;
+        border: none;
+        border-radius: 20px;
+    }
+
+        .btn-remove:hover {
+            background-color: #c82333;
+            /* Darker red */
+            color: #ffffff;
+        }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+</style>
+
+
+@if (Model.Count > 0)
+{
+    <!-- Main Content -->
+    <div>
+        <h1 class="display-4 mb-4">View All Lecturers</h1>
+        <p class="lead">
+            Below is the list of all lecturers. You can filter by department and perform various administrative
+            actions.
+        </p>
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success mb-2" role="alert">
+                @successMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mb-2" role="alert">
+                @errorMessage
+            </div>
+        }
+
+        @if (ViewBag.Faculties != null)
+        {
+            <!-- Filter by Department -->
+            <form method="get" asp-action="ViewAllLecturers">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="faculty">Filter by Faculty</label>
+                    <select class="form-select" id="faculty" name="faculty">
+                        <option value="">All Faculties</option>
+                        @foreach (var faculty in ViewBag.Faculties)
+                        {
+                            <option value="@faculty">@faculty</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
+        }
+
+        <!-- Lecturer Cards -->
+        <div class="row">
+
+            @foreach (var lecturer in Model)
+            {
+
+                <!-- Lecturer Cards -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@($"{lecturer.FirstName} {lecturer.Surname}")</h5>
+                            @* <p class="card-text">ID: 12345</p> *@
+                            <p class="card-text">Faculty: @lecturer.Faculty</p>
+                            <p class="card-text">Module: @lecturer.Module</p>
+                            <p class="card-text">Email: @lecturer.Email</p>
+                            <p class="card-text">Phone: @lecturer.PhoneNumber</p>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#lecturerModal" data-id="@lecturer.Id"
+                                        data-name="@($"{lecturer.FirstName} {lecturer.Surname}")"
+                                        data-department="@lecturer.Faculty"
+                                        data-module="@lecturer.Module" data-email="@lecturer.Email"
+                                        data-phone="@lecturer.PhoneNumber" data-address="@lecturer.Address"
+                                        data-account-details="Account Number: @lecturer.AccountNumber<br>Bank: @lecturer.BankName<br>Branch Code: @lecturer.BranchCode">
+                                    View
+                                    Details
+                                </button>
+
+                                <a asp-action="UpdateLecturerDetailsByManager" asp-route-id="@lecturer.Id" class="btn btn-update">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+
+        <!-- Lecturer Modal -->
+        <div class="modal fade" id="lecturerModal" tabindex="-1" aria-labelledby="lecturerModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="lecturerModalLabel">Lecturer Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>ID:</strong> <span id="lecturerId"></span></p>
+                        <p><strong>Name:</strong> <span id="lecturerName"></span></p>
+
+                        <p><strong>Faculty:</strong> <span id="lecturerDepartment"></span></p>
+                        <p><strong>Module:</strong> <span id="lecturerModule"></span></p>
+                        <p><strong>Email:</strong> <span id="lecturerEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="lecturerPhone"></span></p>
+                        <hr>
+                        <h5>Address</h5>
+                        <p id="lecturerAddress"></p>
+                        <hr>
+                        <h5>Account Details</h5>
+                        <p id="lecturerAccountDetails"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+
+
+                        <a asp-action="UpdateLecturerDetailsByManager" asp-route-id="-1" id="UpdateBtn" class="btn btn-update">Update</a>
+
+                        <a asp-action="" class="btn btn-remove">Remove</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div>
+        <h1 class="display-4 mb-4">View All Lecturers</h1>
+        <p class="lead">No lecturers found.</p>
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var lecturerModal = document.getElementById('lecturerModal');
+
+            // Listen for the modal show event
+            lecturerModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var id = button.getAttribute('data-id');
+                var name = button.getAttribute('data-name');
+                var department = button.getAttribute('data-department');
+                var module = button.getAttribute('data-module');
+                var email = button.getAttribute('data-email');
+                var phone = button.getAttribute('data-phone');
+                var address = button.getAttribute('data-address');
+                var accountDetails = button.getAttribute('data-account-details');
+
+                // Get the modal fields
+                var modalId = lecturerModal.querySelector('#lecturerId');
+                var modalName = lecturerModal.querySelector('#lecturerName');
+                var modalDepartment = lecturerModal.querySelector('#lecturerDepartment');
+                var modalModule = lecturerModal.querySelector('#lecturerModule');
+                var modalEmail = lecturerModal.querySelector('#lecturerEmail');
+                var modalPhone = lecturerModal.querySelector('#lecturerPhone');
+                var modalAddress = lecturerModal.querySelector('#lecturerAddress');
+                var modalAccountDetails = lecturerModal.querySelector('#lecturerAccountDetails');
+
+                var updateButton = lecturerModal.querySelector('#UpdateBtn');
+                var removeButton = lecturerModal.querySelector('.btn-remove');
+
+                // Fill the modal with the data
+                modalId.textContent = id;
+                modalName.textContent = name;
+                modalDepartment.textContent = department;
+                modalModule.textContent = module;
+                modalEmail.textContent = email;
+                modalPhone.textContent = phone;
+                modalAddress.textContent = address; // Use textContent for plain text
+                modalAccountDetails.innerHTML = accountDetails; // Keep innerHTML for account details since it's HTML
+
+                // Function to dynamically update the route ID in the href
+                function updateLecturerIdInLink(newId) {
+                    if (updateButton) {
+                        var currentHref = updateButton.getAttribute('href');
+                        var newHref = currentHref.replace(/(-?\d+)$/, newId); // Replace last part of URL with new ID
+                        updateButton.setAttribute('href', newHref);
+                    }
+
+                    if (removeButton) {
+                        removeButton.setAttribute('href', '/HTML-Webpages/PC-AM Views/CMCS-RemoveLecturer.html?id=' + newId);
+                    }
+                }
+
+                // Update the button hrefs
+                updateLecturerIdInLink(id);
+            });
+        });
+    </script>
+}

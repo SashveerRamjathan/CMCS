@@ -1,0 +1,197 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model UpdateAcademicManagerViewModel
+
+@{
+    ViewData["Title"] = "Update Academic Manager Details";
+
+    string? successMessage = TempData["SuccessMessage"] as string;
+    string? errorMessage = TempData["ErrorMessage"] as string;
+}
+
+<style>
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        /* Orange button */
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            /* Cyan hover effect for buttons */
+            color: #ffffff;
+        }
+
+    .btn-danger {
+        border-radius: 20px;
+    }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #f46516;
+        border-color: #f46516;
+    }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #0a9d9b;
+            border-color: #0a9d9b;
+        }
+
+    .btn-submit {
+        border-radius: 20px;
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: lightgreen;
+            color: #ffffff;
+        }
+
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Update Academic Manager Details</h1>
+
+    <!-- Display success message if it exists -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mb-2" role="alert">
+            @successMessage
+        </div>
+    }
+
+    <!-- Display error message if it exists -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    <!-- Form to update details -->
+    <form id="updateDetailsForm" asp-action="UpdateAcademicManagerDetails" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label class="form-label">First Name:</label>
+            <input asp-for="FirstName" type="text" class="form-control" id="FirstName" name="FirstName" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Surname</label>
+            <input asp-for="Surname" type="text" class="form-control" id="Surname" name="Surname" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" id="Email" name="Email" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input asp-for="PhoneNumber" type="tel" class="form-control" id="Phone" name="PhoneNumber" required>
+        </div>
+        <div class="mb-3">
+            <label>Street Address</label>
+            <input asp-for="StreetAddress" type="text" class="form-control" id="Street" name="StreetAddress" required>
+        </div>
+        <div class="mb-3">
+            <label>Residential Area</label>
+            <input asp-for="AreaAddress" type="text" class="form-control" id="Area" name="AreaAddress" required>
+        </div>
+        <div class="mb-3">
+            <label>City</label>
+            <input asp-for="City" type="text" class="form-control" id="City" name="City" required>
+        </div>
+        <div class="mb-3">
+            <label>Province</label>
+            <input asp-for="Province" type="text" class="form-control" id="Province" name="Province" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitButton">
+            Update Details
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Modal for confirmation -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please confirm that your details are correct:</p>
+                <ul>
+                    <li><strong>First Name:</strong> <span id="confirmFirstName"></span></li>
+                    <li><strong>Surname:</strong> <span id="confirmSurname"></span></li>
+                    <li><strong>Email:</strong> <span id="confirmEmail"></span></li>
+                    <li><strong>Phone:</strong> <span id="confirmPhone"></span></li>
+                    <li><strong>Street Address:</strong> <span id="confirmStreet"></span></li>
+                    <li><strong>Residential Area:</strong> <span id="confirmArea"></span></li>
+                    <li><strong>City:</strong> <span id="confirmCity"></span></li>
+                    <li><strong>Province:</strong> <span id="confirmProvince"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-submit" id="confirmButton">Confirm and Update</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Capture the form element
+        const updateDetailsForm = document.getElementById('updateDetailsForm');
+
+        // When the form is submitted, prevent immediate submission
+        updateDetailsForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+
+            // Show the modal to confirm details
+            $('#confirmModal').modal('show');
+        });
+
+        // Event listener to populate the modal with form data when the modal is triggered
+        const confirmModal = document.getElementById('confirmModal');
+        confirmModal.addEventListener('show.bs.modal', function () {
+            document.getElementById('confirmFirstName').innerText = document.getElementById('FirstName').value;
+            document.getElementById('confirmSurname').innerText = document.getElementById('Surname').value;
+            document.getElementById('confirmEmail').innerText = document.getElementById('Email').value;
+            document.getElementById('confirmPhone').innerText = document.getElementById('Phone').value;
+            document.getElementById('confirmStreet').innerText = document.getElementById('Street').value;
+            document.getElementById('confirmArea').innerText = document.getElementById('Area').value;
+            document.getElementById('confirmCity').innerText = document.getElementById('City').value;
+            document.getElementById('confirmProvince').innerText = document.getElementById('Province').value;
+        });
+
+        // Confirm button click event listener
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            // Check the form's validity
+            if (updateDetailsForm.checkValidity()) {
+                // Disable both the confirm and submit buttons to prevent multiple submissions
+                document.getElementById('confirmButton').disabled = true;
+                document.getElementById('submitButton').disabled = true;
+
+                // Submit the form programmatically
+                updateDetailsForm.submit();
+            } else {
+                // If form is not valid, display validation messages
+                updateDetailsForm.reportValidity();
+            }
+        });
+    </script>
+}

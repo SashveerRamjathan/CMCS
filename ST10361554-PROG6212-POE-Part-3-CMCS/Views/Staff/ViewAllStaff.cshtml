@@ -1,0 +1,122 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
+@model List<ApplicationUser>
+
+@{
+    ViewData["Title"] = "View All Staff";
+    string? errorMessage = ViewData["ErrorMessage"] as string;
+    string? successMessage = ViewData["SuccessMessage"] as string;
+
+    // split the list of staff into lecturers and academic managers
+    List<ApplicationUser> managers = Model.Where(u => u.Module == null).ToList();
+
+    List<ApplicationUser> lecturers = Model.Where(u => u.Module != null).ToList();
+}
+
+<style>
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(10, 160, 157, 0.5);
+        }
+
+        .card h5 {
+            color: #f46516;
+        }
+
+    .btn-warning {
+        border-radius: 20px;
+        border: none;
+    }
+
+</style>
+
+<div>
+    <h1 class="mb-4">View All Staff</h1>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success" role="alert">
+            @successMessage
+        </div>
+    }
+
+    <!-- Section for Lecturers -->
+    <h2 class="mb-4">Lecturers</h2>
+
+    <div class="row">
+        @if (lecturers.Any())
+        {
+            foreach (var lecturer in lecturers)
+            {
+                <!-- Lecturer Card -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">ID: @lecturer.Id</h5>
+                            <p class="card-text"><strong>Name:</strong> @($"{lecturer.FirstName} {lecturer.Surname}")</p>
+                            <p class="card-text"><strong>Faculty:</strong> @lecturer.Faculty</p>
+                            <p class="card-text"><strong>Module:</strong> @lecturer.Module</p>
+                            <p class="card-text"><strong>Email:</strong> @lecturer.Email</p>
+                            <p class="card-text"><strong>Phone:</strong> @lecturer.PhoneNumber</p>
+                            <a asp-action="UpdateLecturerDetailsByManager" asp-route-id="@lecturer.Id" class="btn btn-warning">Update</a>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+        else
+        {
+            <p class="lead">No lecturers found.</p>
+        }
+    </div>
+
+    <!-- Section for Academic Managers -->
+    <h2 class="mt-5 mb-4">Academic Managers</h2>
+
+    <div class="row">
+        @if (managers.Any())
+        {
+            foreach (var manager in managers)
+            {
+                <!-- Academic Manager Card -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">ID: @manager.Id</h5>
+                            <p class="card-text"><strong>Name:</strong> @($"{manager.FirstName} {manager.Surname}")</p>
+                            <p class="card-text"><strong>Email:</strong> @manager.Email</p>
+                            <p class="card-text"><strong>Phone:</strong> @manager.PhoneNumber</p>
+                            <a asp-action="UpdateAcademicManagerDetails" asp-route-id="@manager.Id" class="btn btn-warning">Update</a>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+        else
+        {
+            <p class="lead">No Academic Managers found.</p>
+        }
+    </div>
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+}

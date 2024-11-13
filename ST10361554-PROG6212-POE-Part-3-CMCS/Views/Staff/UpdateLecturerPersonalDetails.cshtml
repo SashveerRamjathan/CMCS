@@ -1,0 +1,198 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model UpdateLecturerUserViewModel
+
+@{
+    ViewData["Title"] = "Update Lecturer Personal Details";
+
+    string? successMessage = TempData["SuccessMessage"] as string;
+    string? errorMessage = TempData["ErrorMessage"] as string;
+}
+
+<style>
+
+    .btn-primary {
+        border-radius: 20px;
+        background-color: #f46516;
+        /* Orange button */
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0a9d9b;
+            /* Cyan hover effect for buttons */
+            color: #ffffff;
+        }
+
+    .btn-danger {
+        border-radius: 20px;
+    }
+
+    .modal-header {
+        background-color: #f46516;
+        color: white;
+    }
+
+    .modal-footer .btn-primary {
+        background-color: #f46516;
+        border-color: #f46516;
+    }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #0a9d9b;
+            border-color: #0a9d9b;
+        }
+
+    .btn-submit {
+        border-radius: 20px;
+        background-color: #28a745;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-submit:hover {
+            background-color: lightgreen;
+            color: #ffffff;
+        }
+
+</style>
+
+<!-- Main Content -->
+<div>
+    <h1 class="display-4 mb-4">Update Details</h1>
+
+    <!-- Display success message if it exists -->
+    @if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success mb-2" role="alert">
+            @successMessage
+        </div>
+    }
+
+    <!-- Display error message if it exists -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mb-2" role="alert">
+            @errorMessage
+        </div>
+    }
+
+    <!-- Form to update details -->
+    <form id="updateDetailsForm" asp-action="UpdateLecturerPersonalDetails" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label for="lecturerFirstName" class="form-label">First Name:</label>
+            <input asp-for="FirstName" type="text" class="form-control" id="lecturerFirstName" name="FirstName" required>
+        </div>
+        <div class="mb-3">
+            <label for="lecturerSurname" class="form-label">Surname</label>
+            <input asp-for="Surname" type="text" class="form-control" id="lecturerSurname" name="Surname" required>
+        </div>
+        <div class="mb-3">
+            <label for="lecturerEmail" class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" id="lecturerEmail" name="Email" required>
+        </div>
+        <div class="mb-3">
+            <label for="lecturerPhone" class="form-label">Phone</label>
+            <input asp-for="PhoneNumber" type="tel" class="form-control" id="lecturerPhone" name="PhoneNumber" required>
+        </div>
+        <div class="mb-3">
+            <label for="lecturerDepartment" class="form-label">Faculty (Current: @Model.Faculty)</label>
+            <select asp-for="Faculty" class="form-select" id="lecturerDepartment" name="Faculty" required>
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Finance">Finance</option>
+                <option value="Law">Law</option>
+                <option value="Arts and Humanities">Arts and Humanities</option>
+                <option value="Education">Education</option>
+                <option value="Psychology">Psychology</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="lecturerModule" class="form-label">Module</label>
+            <input asp-for="Module" type="text" class="form-control" id="lecturerModule" name="Module" required>
+        </div>
+
+        <!-- Disclaimer Section -->
+        <p class="text-muted mt-4">
+            To update your address or bank account information, please contact your Academic Manager via email.
+        </p>
+
+        <button type="submit" class="btn btn-primary" id="submitButton">
+            Update Details
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Modal for confirmation -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Please confirm that your details are correct:</p>
+                <ul>
+                    <li><strong>First Name:</strong> <span id="confirmFirstName"></span></li>
+                    <li><strong>Surname:</strong> <span id="confirmSurname"></span></li>
+                    <li><strong>Email:</strong> <span id="confirmEmail"></span></li>
+                    <li><strong>Phone:</strong> <span id="confirmPhone"></span></li>
+                    <li><strong>Faculty:</strong> <span id="confirmFaculty"></span></li>
+                    <li><strong>Module:</strong> <span id="confirmModule"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-submit" id="confirmButton">Confirm and Update</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Capture the form element
+        const updateDetailsForm = document.getElementById('updateDetailsForm');
+
+        // When the form is submitted, prevent immediate submission
+        updateDetailsForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+
+            // Show the modal to confirm details
+            $('#confirmModal').modal('show');
+        });
+
+        // Event listener to populate the modal with form data when the modal is triggered
+        const confirmModal = document.getElementById('confirmModal');
+        confirmModal.addEventListener('show.bs.modal', function () {
+            document.getElementById('confirmFirstName').innerText = document.getElementById('lecturerFirstName').value;
+            document.getElementById('confirmSurname').innerText = document.getElementById('lecturerSurname').value;
+            document.getElementById('confirmEmail').innerText = document.getElementById('lecturerEmail').value;
+            document.getElementById('confirmPhone').innerText = document.getElementById('lecturerPhone').value;
+            document.getElementById('confirmFaculty').innerText = document.getElementById('lecturerDepartment').value;
+            document.getElementById('confirmModule').innerText = document.getElementById('lecturerModule').value;
+        });
+
+        // Confirm button click event listener
+        document.getElementById('confirmButton').addEventListener('click', function () {
+            // Check the form's validity
+            if (updateDetailsForm.checkValidity()) {
+                // Disable both the confirm and submit buttons to prevent multiple submissions
+                document.getElementById('confirmButton').disabled = true;
+                document.getElementById('submitButton').disabled = true;
+
+                // Submit the form programmatically
+                updateDetailsForm.submit();
+            } else {
+                // If form is not valid, display validation messages
+                updateDetailsForm.reportValidity();
+            }
+        });
+    </script>
+}
