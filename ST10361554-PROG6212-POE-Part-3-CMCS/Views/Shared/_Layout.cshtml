@@ -3,42 +3,242 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ST10361554_PROG6212_POE_Part_3_CMCS</title>
+    <title>@ViewData["Title"] - CMCS</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ST10361554_PROG6212_POE_Part_3_CMCS.styles.css" asp-append-version="true" />
+    <link rel="icon" href="~/Images/claims-icon.ico" />
+
+    <style>
+        .navbar {
+            background-color: #2c2c2c;
+            margin-bottom: 0;
+        }
+
+        .navbar-brand {
+            color: #f46516;
+        }
+
+            .navbar-brand:hover {
+                color: #e0e0e0;
+            }
+
+        .navbar-nav .nav-link {
+            color: #f46516;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #e0e0e0;
+            }
+
+
+
+        /* Sidebar styling */
+        .sidebar {
+            min-height: 100vh;
+            background-color: #2c2c2c;
+            padding-top: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #d3d3d3;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: #f46516;
+            color: #ffffff;
+        }
+
+        /* Main content */
+        .main-content {
+            background-color: #e0e0e0;
+        }
+
+        .footer {
+            background-color: #2c2c2c;
+            color: #d3d3d3;
+        }
+
+        .footer a {
+            color: #f46516;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #0a9d9b;
+        }
+
+    </style>
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm box-shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ST10361554_PROG6212_POE_Part_3_CMCS</a>
+                @if (User != null)
+                {
+                    if (User.IsInRole("Lecturer"))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Dashboards" asp-action="GetLecturerDashboard">Contract Monthly Claim System</a>
+                    }
+                    else if (User.IsInRole("Academic Manager"))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Dashboards" asp-action="GetAcademicManagerDashboard">Contract Monthly Claim System</a>
+                    }
+                    else if (User.IsInRole("HR"))
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Dashboards" asp-action="GetHRDashboard">Contract Monthly Claim System</a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Contract Monthly Claim System</a>
+                    }
+                }
+                else
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Contract Monthly Claim System</a>
+                }
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    
+    @if (ViewData["HideSidebar"] == null || !(bool)ViewData["HideSidebar"])
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <div class="sticky-top">
+                        <div class="sidebar-title navbar-brand">Menu</div>
+                        <ul class="nav flex-column py-4">
 
-    <footer class="border-top footer text-muted">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Lecturer"))
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Dashboards" asp-action="GetLecturerDashboard">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="UpdateLecturerPersonalDetails" asp-route-id="@ViewData["UserId"]">Update Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="SubmitClaim">Submit Claim</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="TrackClaimStatus">Track Claim Status</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Academic Manager"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Dashboards" asp-action="GetAcademicManagerDashboard">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="UpdateAcademicManagerDetails" asp-route-id="@ViewData["UserId"]">
+                                        Update Details
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="ViewAllLecturers">
+                                        View All
+                                        Lecturers
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Registrations" asp-action="GetAllPendingLecturers">
+                                        View Lecturer
+                                        Registrations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="ViewAllPendingClaims">
+                                        View All Pending
+                                        Claims
+                                    </a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("HR"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Dashboards" asp-action="GetHRDashboard">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Staff" asp-action="ViewAllStaff">View All Staff</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Registrations" asp-action="GetAllPendingLecturers">
+                                        View Lecturer
+                                        Registrations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Registrations" asp-action="GetAllPendingAcademicManagers">
+                                        View Academic Manager
+                                        Registrations
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="ViewAllPendingClaims">View All Pending Claims</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="ViewAllApprovedClaims">View Approved Claims</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Claims" asp-action="ViewAllRejectedClaims">View Rejected Claims</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" asp-area="" asp-controller="" asp-action="">Generate Claim Statistics Report (Coming Soon)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" asp-area="" asp-controller="" asp-action="">Generate Claim Invoices (Coming Soon)</a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content p-5">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container mt-3">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    }
+
+    <footer class="footer">
         <div class="container">
-            &copy; 2024 - ST10361554_PROG6212_POE_Part_3_CMCS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Contract Monthly Claim System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
