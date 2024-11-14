@@ -137,6 +137,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     user.Claims = new List<Models.Claim>();
                 }
 
+                // Code Attribution:
+                // Creating your first validator
+                // Fluentvalidation.net
+                // 14 November 2024
+                // https://docs.fluentvalidation.net/en/latest/start.html
+
                 // validate the claim model
                 var claimValidator = new ClaimValidator();
                 var validationResult = claimValidator.Validate(claim);
