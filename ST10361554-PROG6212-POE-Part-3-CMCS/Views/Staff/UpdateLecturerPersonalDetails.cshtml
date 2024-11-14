@@ -5,7 +5,8 @@
     ViewData["Title"] = "Update Lecturer Personal Details";
 
     string? successMessage = TempData["SuccessMessage"] as string;
-    string? errorMessage = TempData["ErrorMessage"] as string;
+    string? errorMessage = ViewData["ErrorMessage"] as string;
+    List<string>? validationErrors = ViewData["ValidationErrors"] as List<string>;
 }
 
 <style>
@@ -69,11 +70,24 @@
         </div>
     }
 
-    <!-- Display error message if it exists -->
+    <!-- Display error message if any -->
     @if (!string.IsNullOrEmpty(errorMessage))
     {
-        <div class="alert alert-danger mb-2" role="alert">
+        <div class="alert alert-danger" role="alert">
             @errorMessage
+        </div>
+    }
+
+    <!-- Display validation errors if any -->
+    @if (validationErrors != null && validationErrors.Count > 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach (var error in validationErrors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
         </div>
     }
 
