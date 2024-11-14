@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Submit New Claim";
+    string? errorMessage = ViewData["ErrorMessage"] as string;
+    List<string>? validationErrors = ViewData["ValidationErrors"] as List<string>;
 }
 
 <style>
@@ -39,6 +41,27 @@
 <div>
     <h1 class="display-4 mb-4">Submit a New Claim</h1>
     <p class="lead">Fill out the form below to submit a new claim.</p>
+
+    <!-- Display error message if any -->
+	@if (!string.IsNullOrEmpty(errorMessage))
+	{
+		<div class="alert alert-danger" role="alert">
+			@errorMessage
+		</div>
+	}
+
+    <!-- Display validation errors if any -->
+	@if (validationErrors != null && validationErrors.Count > 0)
+	{
+		<div class="alert alert-danger" role="alert">
+			<ul>
+				@foreach (var error in validationErrors)
+				{
+					<li>@error</li>
+				}
+			</ul>
+		</div>
+	}
 
     <form id="claimForm" asp-action="SubmitClaim" method="post" enctype="multipart/form-data">
         <div class="mb-3">
