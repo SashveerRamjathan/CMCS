@@ -25,6 +25,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models
         [DisplayName("Province")]
         public string? Province { get; set; }
 
+        #region Lecturer properties
 
         // Lecturer properties
         [DisplayName("Faculty")]
@@ -44,6 +45,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models
 
         public bool IsLecturerApproved { get; set; }
 
+        #endregion
 
         // Academic Manager properties
 
