@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
 using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+using System.Security.Claims;
+using ST10361554_PROG6212_POE_Part_3_CMCS.FluentValidators;
 
 namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 {
@@ -208,14 +210,40 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
         {
             try
             {
-                // Check if the model state is valid
-                if (!ModelState.IsValid)
+                // get the users role
+                var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+                // check if the user role is valid
+                if (string.IsNullOrEmpty(userRole))
                 {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    _logger.LogError($"Invalid lecturer details: {string.Join(", ", errors.Select(e => e.ErrorMessage))}");
-                    TempData["ErrorMessage"] = "Invalid lecturer details. Please correct the errors and try again.";
+                    _logger.LogError("User role not found");
+                    TempData["ErrorMessage"] = "User role not found.";
 
                     ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                    return View("UpdateLecturerDetails", model);
+                }
+
+                // validate the lecturer user model
+                var lecturerDetailsValidator = new UpdateLecturerDetailsValidator(userRole);
+
+                var validationResult = lecturerDetailsValidator.Validate(model);
+
+                // check if the claim is valid
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.ErrorMessage);
+                    }
+
+                    TempData["ErrorMessage"] = "Please correct the errors in the form.";
+                    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                    ViewData["ValidationErrors"] = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
 
                     return View("UpdateLecturerDetails", model);
                 }
@@ -323,61 +351,46 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
             }
         }
 
-        // Helper method to validate the lecturer model
-        private List<string> ValidateLecturerModel(UpdateLecturerUserViewModel model)
-        {
-            List<string> errors = new List<string>();
-
-            // check if only the editable properties are valid
-            if (string.IsNullOrEmpty(model.FirstName))
-            {
-                errors.Add("First name is required");
-            }
-
-            if (string.IsNullOrEmpty(model.Surname))
-            {
-                errors.Add("Surname is required");
-            }
-
-            if (string.IsNullOrEmpty(model.Email))
-            {
-                errors.Add("Email is required");
-            }
-
-            if (string.IsNullOrEmpty(model.PhoneNumber))
-            {
-                errors.Add("Phone number is required");
-            }
-
-            if (string.IsNullOrEmpty(model.Faculty))
-            {
-                errors.Add("Faculty is required");
-            }
-
-            if (string.IsNullOrEmpty(model.Module))
-            {
-                errors.Add("Module is required");
-            }
-
-            return errors;
-        }
-
+        
         [HttpPost]
         [Authorize(Roles = "Lecturer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateLecturerPersonalDetails(UpdateLecturerUserViewModel model)
         {
-            // Validate the model
-            var errors = ValidateLecturerModel(model);
+            // get the users role
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
 
-            if (errors.Any())
+            // check if the user role is valid
+            if (string.IsNullOrEmpty(userRole))
             {
-                foreach (var error in errors)
-                {
-                    TempData["ErrorMessage"] += error + "\n";
-                }
+                _logger.LogError("User role not found");
+                TempData["ErrorMessage"] = "User role not found.";
 
                 ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                return View(model);
+            }
+
+            // validate the lecturer user model
+            var lecturerDetailsValidator = new UpdateLecturerDetailsValidator(userRole);
+
+            var validationResult = lecturerDetailsValidator.Validate(model);
+
+            // check if the claim is valid
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    ModelState.AddModelError("", error.ErrorMessage);
+                }
+
+                TempData["ErrorMessage"] = "Please correct the errors in the form.";
+                ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                ViewData["ValidationErrors"] = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
 
                 return View(model);
             }
