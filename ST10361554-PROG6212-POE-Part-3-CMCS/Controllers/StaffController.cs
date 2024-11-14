@@ -521,18 +521,36 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
         {
             try
             {
-                // check if the model state is valid
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogError($"Invalid model state for Academic Manager with ID: {model.Id}");
-                    TempData["ErrorMessage"] = "Invalid Academic Manager details. Please correct the errors.";
+                // Code Attribution:
+                // Creating your first validator
+                // Fluentvalidation.net
+                // 14 November 2024
+                // https://docs.fluentvalidation.net/en/latest/start.html
 
+                // validate the academic manager details model
+                var academicManagerValidator = new UpdateAcademicManagerValidator();
+                var validationResult = academicManagerValidator.Validate(model);
+
+                // check if the academic manager details is valid
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.ErrorMessage);
+                    }
+
+                    TempData["ErrorMessage"] = "Please correct the errors in the form.";
                     ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                    ViewData["ValidationErrors"] = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
 
                     return View("UpdateAcademicManagerDetails", model);
                 }
 
-                // get the lecturer user by id
+                // get the manager user by id
                 var managerUser = await _userManager.FindByIdAsync(model.Id!);
 
                 // check if the lecturer user is null
@@ -545,7 +563,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                         : RedirectToAction("ViewAllStaff", "Staff");
                 }
 
-                // update the lecturer user properties
+                // update the manager user properties
                 managerUser.FirstName = model.FirstName;
                 managerUser.Surname = model.Surname;
                 managerUser.UserName = model.Email;
@@ -556,7 +574,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                 managerUser.City = model.City;
                 managerUser.Province = model.Province;
 
-                // update the lecturer user
+                // update the manager user
                 var result = await _userManager.UpdateAsync(managerUser);
 
                 // check if the update was successful
