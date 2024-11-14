@@ -6,6 +6,7 @@ using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
 using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
 using ST10361554_PROG6212_POE_Part_3_CMCS.Data;
 using System.Security.Claims;
+using ST10361554_PROG6212_POE_Part_3_CMCS.FluentValidators;
 
 namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 {
@@ -46,7 +47,13 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                 _logger.LogError($"Invalid claim model state for user {User.FindFirstValue(ClaimTypes.NameIdentifier)}.");
                 TempData["ErrorMessage"] = "Please correct the errors in the form.";
 
+                // Collect validation errors and pass them to the view
                 ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                ViewData["ValidationErrors"] = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
 
                 return View(model);
             }
@@ -128,6 +135,29 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                 if (user.Claims == null)
                 {
                     user.Claims = new List<Models.Claim>();
+                }
+
+                // validate the claim model
+                var claimValidator = new ClaimValidator();
+                var validationResult = claimValidator.Validate(claim);
+
+                // check if the claim is valid
+                if (!validationResult.IsValid)
+                {
+                    foreach (var error in validationResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.ErrorMessage);
+                    }
+
+                    TempData["ErrorMessage"] = "Please correct the errors in the form.";
+                    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+
+                    ViewData["ValidationErrors"] = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+
+                    return View(model);
                 }
 
                 // add the claim to the user
