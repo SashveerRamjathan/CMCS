@@ -112,6 +112,7 @@
                             <h5 class="card-title">@($"{lecturer.FirstName} {lecturer.Surname}")</h5>
                             <p class="card-text"><strong>Faculty:</strong> @lecturer.Faculty</p>
                             <p class="card-text"><strong>Module:</strong> @lecturer.Module</p>
+							<p class="card-text"> <strong>Hourly Rate:</strong> @lecturer.HourlyRate</p>
                             <p class="card-text"><strong>Email:</strong> @lecturer.Email</p>
                             <p class="card-text"><strong>Phone:</strong> @lecturer.PhoneNumber</p>
                             <a href="#" class="btn btn-approve" data-bs-toggle="modal" data-bs-target="#lecturerModal-@lecturer.Id">
@@ -137,6 +138,7 @@
 
                                 <p><strong>Faculty:</strong> @lecturer.Faculty</p>
                                 <p><strong>Module:</strong> @lecturer.Module</p>
+								<p><strong>Hourly Rate:</strong> @lecturer.HourlyRate</p>
                                 <p><strong>Email:</strong> @lecturer.Email</p>
                                 <p><strong>Phone:</strong> @lecturer.PhoneNumber</p>
                                 <hr>
