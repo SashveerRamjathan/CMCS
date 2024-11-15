@@ -172,6 +172,15 @@
             document.getElementById('claimForm').submit();
         }
 
+         // Set HourlyRate value on form load
+        document.addEventListener("DOMContentLoaded", function () {
+            const hourlyRateValue = parseFloat(@Model.HourlyRate || "0") || 0;
+            const hourlyRateInput = document.getElementById('hourlyRate');
+            if (hourlyRateInput) {
+                hourlyRateInput.value = hourlyRateValue.toFixed(2); // Ensure consistent decimal formatting
+            }
+        });
+
     </script>
 }
 
