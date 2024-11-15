@@ -119,7 +119,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
                         BankName = "Investec",
                         BranchCode = "452329",
                         IsLecturerApproved = true,
-                        IsManagerApproved = false
+                        IsManagerApproved = false,
+                        HourlyRate = 355.00m
                     },
                     new ApplicationUser
                     {
@@ -138,7 +139,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
                         BankName = "Standard Bank",
                         BranchCode = "44156",
                         IsLecturerApproved = false,
-                        IsManagerApproved = false
+                        IsManagerApproved = false,
+                        HourlyRate = 280.00m
                     },
                     new ApplicationUser
                     {
@@ -157,7 +159,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
                         BankName = "NedBank",
                         BranchCode = "98986",
                         IsLecturerApproved = false,
-                        IsManagerApproved = false
+                        IsManagerApproved = false,
+                        HourlyRate = 320.00m
                     },
                 };
 
