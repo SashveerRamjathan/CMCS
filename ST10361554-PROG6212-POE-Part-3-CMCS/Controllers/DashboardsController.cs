@@ -69,7 +69,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     Email = user.Email!,
                     PhoneNumber = user.PhoneNumber!,
                     Faculty = user.Faculty!,
-                    Module = user.Module!
+                    Module = user.Module!,
+                    HourlyRate = user.HourlyRate!
                 };
 
                 _logger.LogInformation($"GetLecturerDashboard: Successfully retrieved dashboard for user {userId}.");

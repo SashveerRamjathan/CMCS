@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Lecturer Dashboard";
+	string? errorMessage = ViewData["ErrorMessage"] as string;
 }
 
 <style>
@@ -51,6 +52,14 @@
         Welcome to the Contract Monthly Claim System. You can submit, track, and manage your claims
         efficiently from this dashboard.
     </p>
+
+    <!-- Display error message if any -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @errorMessage
+        </div>
+    }
 
     <div class="row">
         <!-- Submit Claim -->
@@ -134,7 +143,8 @@
                                 <strong>Email:</strong> @Model.Email<br>
                                 <strong>Phone:</strong> @Model.PhoneNumber<br>
                                 <strong>Faculty:</strong> @Model.Faculty<br>
-                                <strong>Module:</strong> @Model.Module
+                                <strong>Module:</strong> @Model.Module<br />
+								<strong>Hourly Rate:</strong> @Model.HourlyRate
                             </p>
                             <a asp-area="" asp-controller="Staff" asp-action="UpdateLecturerPersonalDetails" class="btn btn-warning" asp-route-id="@Model.Id">Update Details</a>
                         </div>
