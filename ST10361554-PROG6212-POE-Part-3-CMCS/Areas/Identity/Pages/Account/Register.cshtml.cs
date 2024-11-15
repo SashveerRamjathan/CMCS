@@ -114,6 +114,10 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Areas.Identity.Pages.Account
 
             [Display(Name = "Branch Code")]
             public string BranchCode { get; set; }
+
+            [Range(0.1, 500, ErrorMessage = "Hourly Rate can not be 0 or exceed 500")]
+            [Display(Name = "Hourly Rate")]
+            public decimal HourlyRate { get; set; }
         }
 
 
@@ -318,6 +322,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Areas.Identity.Pages.Account
                     user.AccountNumber = Input.AccountNumber;
                     user.BankName = Input.BankName;
                     user.BranchCode = Input.BranchCode;
+                    user.HourlyRate = Input.HourlyRate;
                 }
 
                 return await CreateUserAsync(user, Input.Role, returnUrl);
