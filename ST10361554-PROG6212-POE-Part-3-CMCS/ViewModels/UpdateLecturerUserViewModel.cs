@@ -29,5 +29,7 @@
         public string? City { get; set; }
 
         public string? Province { get; set; }
+
+        public decimal? HourlyRate { get; set; }
     }
 }

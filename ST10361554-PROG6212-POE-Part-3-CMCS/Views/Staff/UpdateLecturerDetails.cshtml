@@ -118,6 +118,11 @@
                 <label for="lecturerModule" class="form-label">Module</label>
                 <input asp-for="Module" type="text" class="form-control" id="lecturerModule" name="Module" required>
             </div>
+            <div class="mb-3">
+                <label for="lecturerHourlyRate" class="form-label">Hourly Rate</label>
+                <input asp-for="HourlyRate" type="number" class="form-control" id="lecturerHourlyRate" name="HourlyRate"
+                       min="0.1" max="500" step="0.1" required>
+            </div>
         </fieldset>
 
         <fieldset class="mb-4">
@@ -202,6 +207,7 @@
 
             const lecturerDepartment = document.getElementById('lecturerDepartment').value;
             const lecturerModule = document.getElementById('lecturerModule').value;
+            const lecturerHourlyRate = document.getElementById('lecturerHourlyRate').value;
 
             const street = document.getElementById('street').value;
             const area = document.getElementById('area').value;
@@ -221,6 +227,7 @@
                         <hr>
                         <li><strong>Faculty:</strong> ${lecturerDepartment}</li>
                         <li><strong>Module:</strong> ${lecturerModule}</li>
+                        <li><strong>Hourly Rate:</strong> R ${lecturerHourlyRate}</li>
                         <hr>
                         <li><strong>Street Address:</strong> ${street}</li>
                         <li><strong>Residential Area:</strong> ${area}</li>

@@ -77,7 +77,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                         AccountNumber = user.AccountNumber!,
                         BankName = user.BankName!,
                         BranchCode = user.BranchCode!,
-                        Address = $"{user.StreetAddress}, {user.AreaAddress}, {user.City}, {user.Province}"
+                        Address = $"{user.StreetAddress}, {user.AreaAddress}, {user.City}, {user.Province}",
+                        HourlyRate = user.HourlyRate
                     };
 
                     lecturers.Add(lecturerUser);
@@ -186,7 +187,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     StreetAddress = lecturerUser.StreetAddress!,
                     AreaAddress = lecturerUser.AreaAddress!,
                     City = lecturerUser.City!,
-                    Province = lecturerUser.Province!
+                    Province = lecturerUser.Province!,
+                    HourlyRate = lecturerUser.HourlyRate
                 };
 
                 _logger.LogInformation($"Lecturer found with ID: {id}");
@@ -275,6 +277,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                 lecturerUser.AreaAddress = model.AreaAddress;
                 lecturerUser.City = model.City;
                 lecturerUser.Province = model.Province;
+                lecturerUser.HourlyRate = model.HourlyRate;
 
                 // update the lecturer user
                 var result = await _userManager.UpdateAsync(lecturerUser);

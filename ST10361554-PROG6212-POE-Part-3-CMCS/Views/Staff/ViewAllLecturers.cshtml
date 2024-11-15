@@ -138,7 +138,8 @@
                                         data-department="@lecturer.Faculty"
                                         data-module="@lecturer.Module" data-email="@lecturer.Email"
                                         data-phone="@lecturer.PhoneNumber" data-address="@lecturer.Address"
-                                        data-account-details="Account Number: @lecturer.AccountNumber<br>Bank: @lecturer.BankName<br>Branch Code: @lecturer.BranchCode">
+                                        data-account-details="Account Number: @lecturer.AccountNumber<br>Bank: @lecturer.BankName<br>Branch Code: @lecturer.BranchCode"
+                                        data-hourly-rate="Hourly Rate: @lecturer.HourlyRate">
                                     View
                                     Details
                                 </button>
@@ -169,6 +170,7 @@
 
                         <p><strong>Faculty:</strong> <span id="lecturerDepartment"></span></p>
                         <p><strong>Module:</strong> <span id="lecturerModule"></span></p>
+						<p><strong>Hourly Rate:</strong> <span id="lecturerHourlyRate"></span></p>
                         <p><strong>Email:</strong> <span id="lecturerEmail"></span></p>
                         <p><strong>Phone:</strong> <span id="lecturerPhone"></span></p>
                         <hr>
@@ -216,6 +218,7 @@ else
                 var phone = button.getAttribute('data-phone');
                 var address = button.getAttribute('data-address');
                 var accountDetails = button.getAttribute('data-account-details');
+				var hourlyRate = button.getAttribute('data-hourly-rate');
 
                 // Get the modal fields
                 var modalId = lecturerModal.querySelector('#lecturerId');
@@ -226,6 +229,7 @@ else
                 var modalPhone = lecturerModal.querySelector('#lecturerPhone');
                 var modalAddress = lecturerModal.querySelector('#lecturerAddress');
                 var modalAccountDetails = lecturerModal.querySelector('#lecturerAccountDetails');
+				var modalHourlyRate = lecturerModal.querySelector('#lecturerHourlyRate');
 
                 var updateButton = lecturerModal.querySelector('#UpdateBtn');
                 var removeButton = lecturerModal.querySelector('.btn-remove');
@@ -239,6 +243,7 @@ else
                 modalPhone.textContent = phone;
                 modalAddress.textContent = address; // Use textContent for plain text
                 modalAccountDetails.innerHTML = accountDetails; // Keep innerHTML for account details since it's HTML
+				modalHourlyRate.textContent = hourlyRate;
 
                 // Function to dynamically update the route ID in the href
                 function updateLecturerIdInLink(newId) {

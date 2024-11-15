@@ -23,5 +23,7 @@
         public string? BranchCode { get; set; }
 
         public string? Address { get; set; }
+
+        public decimal? HourlyRate { get; set; }
     }
 }

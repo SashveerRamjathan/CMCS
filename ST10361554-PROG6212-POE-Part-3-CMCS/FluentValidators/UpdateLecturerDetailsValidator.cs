@@ -42,12 +42,18 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.FluentValidators
                 RuleFor(x => x.AreaAddress).Empty().WithMessage("You cannot update your address.");
                 RuleFor(x => x.City).Empty().WithMessage("You cannot update your address.");
                 RuleFor(x => x.Province).Empty().WithMessage("You cannot update your address.");
+                RuleFor(x => x.HourlyRate).Empty().WithMessage("You cannot update your hourly rate.");
             }
             else if (userRole.Equals("Academic Manager") || userRole.Equals("HR"))
             {
                 // Academic Manager and HR can update all fields
                 RuleFor(x => x.Faculty).NotEmpty().WithMessage("Faculty is required.");
                 RuleFor(x => x.Module).NotEmpty().WithMessage("Module is required.");
+                RuleFor(x => x.HourlyRate)
+                    .LessThanOrEqualTo(500)
+                    .GreaterThan(0)
+                    .NotEmpty()
+                    .WithMessage("Hourly rate is required and must be more than 0 but can not exceed 500.");
 
                 RuleFor(x => x.AccountNumber).NotEmpty().WithMessage("Account number is required.");
                 RuleFor(x => x.BankName).NotEmpty().WithMessage("Bank name is required.");
