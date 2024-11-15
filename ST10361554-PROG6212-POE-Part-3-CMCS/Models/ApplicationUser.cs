@@ -45,6 +45,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models
 
         public bool IsLecturerApproved { get; set; }
 
+        public decimal? HourlyRate { get; set; } // set on lecturer registration
+
         #endregion
 
         // Academic Manager properties
