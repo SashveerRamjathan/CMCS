@@ -32,9 +32,57 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
         [Authorize(Roles = "Lecturer")]
         [HttpGet]
-        public IActionResult SubmitClaim()
+        public async Task<IActionResult> SubmitClaim()
         {
-            return View(new SubmitClaimViewModel());
+            try
+            {
+                // get the current users id
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // check if the user id is null or empty
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _logger.LogError("User ID is null. Cannot proceed with submitting the claim.");
+                    TempData["ErrorMessage"] = "Your session has expired. Please log in again.";
+                    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+                    return RedirectToPage("/Account/Login", new { area = "Identity" });
+                }
+
+                // get the current user based on the user id
+                var user = await _userManager.FindByIdAsync(userId);
+
+                // check if user is null
+                if (user == null)
+                {
+                    _logger.LogError("No user found for ID {UserId}.", userId);
+                    return RedirectToAction("GetLecturerDashboard", "Dashboards");
+                }
+
+                // check the hourly rate of the user
+                if (user.HourlyRate == null)
+                {
+                    _logger.LogError("Hourly rate not set for user {UserId}.", userId);
+                    TempData["ErrorMessage"] = "Hourly rate not set. Please contact your administrator.";
+                    ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+                    return RedirectToAction("GetLecturerDashboard", "Dashboards");
+                }
+
+                // pass the hourly rate to the view
+                SubmitClaimViewModel model = new SubmitClaimViewModel
+                {
+                    HourlyRate = (decimal)user.HourlyRate
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                // log the error and return an error message
+                _logger.LogError(ex.Message, $"An error occurred while fetching claim form for user {User.FindFirstValue(ClaimTypes.NameIdentifier)}.");
+                TempData["ErrorMessage"] = "An error occurred while fetching the claim form. Please try again later.";
+                ViewData["ErrorMessage"] = TempData["ErrorMessage"];
+                return RedirectToAction("GetLecturerDashboard", "Dashboards");
+            }
         }
 
         [Authorize(Roles = "Lecturer")]

@@ -91,8 +91,8 @@
 
         <div class="mb-3">
             <label asp-for="HourlyRate" class="form-label"></label>
-            <input asp-for="HourlyRate" type="number" class="form-control" id="hourlyRate" name="HourlyRate" min="0" step="0.01"
-                   required oninput="calculateFinalAmount()">
+            <input asp-for="HourlyRate" type="number" class="form-control" id="hourlyRate" name="HourlyRate" value="@Model.HourlyRate"
+                   required oninput="calculateFinalAmount()" readonly>
             <span asp-validation-for="HourlyRate" class="text-danger"></span>
         </div>
 
