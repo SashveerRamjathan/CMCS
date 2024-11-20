@@ -15,4 +15,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     // Add DbSet for Claims
     public DbSet<Claim> Claim { get; set; }
 
+    // Add DbSet for Invoices
+    public DbSet<Invoice> Invoice { get; set; }
 }
