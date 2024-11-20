@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ST10361554_PROG6212_POE_Part_3_CMCS.Data;
 using ST10361554_PROG6212_POE_Part_3_CMCS.Models;
 using ST10361554_PROG6212_POE_Part_3_CMCS.Services;
+using QuestPDF.Infrastructure;
+using QuestPDF;
 
 namespace ST10361554_PROG6212_POE_Part_3_CMCS
 {
@@ -11,6 +13,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // add license setting for questPDF service
+            Settings.License = LicenseType.Community;
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
