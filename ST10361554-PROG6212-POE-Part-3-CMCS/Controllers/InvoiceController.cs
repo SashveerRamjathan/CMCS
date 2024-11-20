@@ -151,6 +151,11 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                     model.InvoiceItems = invoiceItems;
 
+                    // success message for filtering by faculty
+                    TempData["SuccessMessage"] = $"Claims filtered for {faculty} faculty";
+
+                    ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+
                     return View(model);
                 }
                 else
