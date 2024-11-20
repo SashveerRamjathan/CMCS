@@ -162,7 +162,11 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     row.RelativeItem().Component(new AddressComponent("For", Model.LecturerAddress));
                 });
 
-                column.Item().Element(ComposeClaimDetails); // Add the table of items
+                column.Item().PaddingBottom(5).LineHorizontal(1); // Add a horizontal line with padding
+
+                column.Item().Element(ComposeClaimDetails); // Add the claim details
+
+                column.Item().PaddingBottom(5).LineHorizontal(1); // Add a horizontal line with padding
 
                 // Add comments section if there are any comments
                 if (!string.IsNullOrWhiteSpace(Model.Comments))
