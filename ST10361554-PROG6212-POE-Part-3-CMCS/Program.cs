@@ -28,6 +28,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS
             // Register SeedDatabase service
             builder.Services.AddScoped<SeedDatabase>();
 
+            // Register InvoiceInformationService
+            builder.Services.AddScoped<InvoiceInformationService>();
+
+            // Register InvoiceGenerationService
+            builder.Services.AddScoped<InvoiceGenerationService>();
+
             // Changed from IdentityUser to ApplicationUser
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                             .AddEntityFrameworkStores<ApplicationDbContext>()
