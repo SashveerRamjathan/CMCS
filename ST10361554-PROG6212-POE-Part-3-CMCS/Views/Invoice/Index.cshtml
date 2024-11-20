@@ -1,0 +1,178 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model GenerateInvoiceViewModel
+
+@{
+	ViewData["Title"] = "Generate and View Invoices";
+	string? successMessage = ViewData["SuccessMessage"] as string;
+	string? errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+	.btn-primary {
+		border-radius: 20px;
+		background-color: #f46516;
+		color: #ffffff;
+		border: none;
+	}
+
+		.btn-primary:hover {
+			background-color: #0a9d9b;
+			color: #ffffff;
+		}
+
+	.btn-approve {
+		background-color: #28a745;
+		color: #ffffff;
+		border: none;
+		border-radius: 20px;
+	}
+
+		.btn-approve:hover {
+			background-color: lightgreen;
+			color: #333333;
+		}
+
+	.card.card-invoice {
+		background-color: #ffffff;
+		border: none;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	.card.card-claim {
+		background-color: #ffffff;
+		border: none;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+	}
+
+		.card.card-claim:hover {
+			transform: scale(1.05);
+			box-shadow: 0 8px 16px rgba(10, 157, 0.5);
+		}
+
+		.card.card-claim h5 {
+			color: #f46516;
+		}
+
+
+</style>
+
+<h1 class="display-4 mb-4">Generate And View All Claim Invoices</h1>
+<p class="lead">
+	Below is the list of all approved claims. You can generate, download or view the invoice for each claim.
+</p>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+	<div class="alert alert-success mb-2" role="alert">
+		@successMessage
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger mb-2" role="alert">
+		@errorMessage
+	</div>
+}
+
+@if (ViewBag.Faculties != null)
+{
+	<!-- Filter by Department -->
+	<form method="get" asp-action="Index">
+		<div class="input-group mb-3">
+			<label class="input-group-text" for="faculty">Filter by Faculty</label>
+			<select class="form-select" id="faculty" name="faculty">
+				<option value="">All Faculties</option>
+				@foreach (var faculty in ViewBag.Faculties)
+				{
+					<option value="@faculty">@faculty</option>
+				}
+			</select>
+			<button type="submit" class="btn btn-primary">Filter</button>
+		</div>
+	</form>
+}
+
+@if (Model == null || Model.Claims == null || Model.Claims.Count == 0)
+{
+	<p>No claims to display at the moment</p>
+}
+else
+{
+	@foreach (var claim in Model.Claims)
+	{
+		<div class="col-md-4 mb-4">
+			<div class="card card-claim">
+				<div class="card-body">
+					<h5 class="card-title">Claim ID: @claim.Id</h5>
+					<p class="card-text"><strong>Claim Name: @claim.ClaimName</strong> </p>
+					<p class="card-text"><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+					<p class="card-text"><strong>Faculty:</strong> @claim.User.Faculty</p>
+					<p class="card-text"><strong>Date:</strong> @claim.ClaimDate.ToString("D")</p>
+					<p class="card-text"><strong>Status:</strong>@claim.Status</p>
+					<p class="card-text"><strong>Total:</strong> R @claim.FinalAmount</p>
+					<a class="btn btn-approve" asp-controller="Invoice" asp-action="GenerateInvoice" asp-route-claimId="@claim.Id">
+						Generate Invoice
+					</a>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+<br />
+<br />
+
+@if (Model == null || Model.Claims == null || Model.InvoiceItems.Count == 0)
+{
+	<div class="card card-invoice m-2">
+		<div class="card-body">
+			<h2 class="card-title">Invoices</h2>
+			<p class="card-text">There are no invoices to display at the moment</p>
+		</div>
+	</div>
+}
+else
+{
+	<div class="card card-invoice m-2">
+		<div class="card-body">
+			<h2 class="card-title">Invoices</h2>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead style="background-color: #f46516; color: #fff;">
+						<tr>
+							<th>Invoice Name</th>
+							<th>Claim ID</th>
+							<th>Claim Name</th>
+							<th>Lecturer</th>
+							<th>Claim Date</th>
+							<th>Claim Total</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var invoice in Model.InvoiceItems)
+						{
+							<tr>
+								<td>@invoice.Invoice.DocumentName</td>
+								<td>@invoice.Claim.Id</td>
+								<td>@invoice.Claim.ClaimName</td>
+								<td>@($"{invoice.Claim.User.FirstName} {invoice.Claim.User.Surname}")</td>
+								<td>@invoice.Claim.ClaimDate</td>
+								<td>R @invoice.Claim.FinalAmount.ToString()</td>
+								<td>
+									<a class="btn btn-primary" asp-controller="Invoice" asp-action="ViewInvoice" asp-route-claimId="@invoice.Claim.Id" target="_blank">View</a>
+									<a class="btn btn-approve" asp-controller="Invoice" asp-action="DownloadInvoice" asp-route-claimId="@invoice.Claim.Id">Download</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+}
