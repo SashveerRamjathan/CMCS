@@ -308,6 +308,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                 _logger.LogInformation($"User {userId} has {claims.Count} claims.");
 
+                // order the claims list in chronological order
+                claims = claims.OrderByDescending(c => c.ClaimDate).ToList();
+
                 return View(claims);
             }
             catch (Exception ex)
@@ -474,6 +477,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     // Display success message
                     ViewData["SuccessMessage"] = TempData["SuccessMessage"];
 
+                    // order the claims list in chronological order
+                    claims = claims.OrderByDescending(c => c.ClaimDate).ToList();
+
                     return View(claims);
                 }
                 else
@@ -499,6 +505,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                     // Pass success messages to the view
                     ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+
+                    // order the claims list in chronological order
+                    allClaims = allClaims.OrderByDescending(c => c.ClaimDate).ToList();
 
                     return View(allClaims);
                 }
@@ -725,6 +734,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                 _logger.LogInformation($"ViewAllApprovedClaims: {claims.Count} approved claims found.");
 
+                // order the claims list in chronological order
+                claims = claims.OrderByDescending(c => c.ClaimDate).ToList();
+
                 return View(claims);
             }
             catch (Exception ex)
@@ -758,6 +770,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                 }
 
                 _logger.LogInformation($"ViewAllRejectedClaims: {claims.Count} rejected claims found.");
+
+                // order the claims list in chronological order
+                claims = claims.OrderByDescending(c => c.ClaimDate).ToList();
 
                 return View(claims);
             }
