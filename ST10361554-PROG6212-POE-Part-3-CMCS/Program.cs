@@ -34,6 +34,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS
             // Register InvoiceGenerationService
             builder.Services.AddScoped<InvoiceGenerationService>();
 
+            // Register ReportInformationService
+            builder.Services.AddScoped<ReportInformationService>();
+
+            // Register ReportGenerationService
+            builder.Services.AddScoped<ReportGenerationService>();
+
             // Changed from IdentityUser to ApplicationUser
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                             .AddEntityFrameworkStores<ApplicationDbContext>()
