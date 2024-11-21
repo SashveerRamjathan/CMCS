@@ -89,41 +89,22 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
                 }
 
                 // calculate the aggregate data for the approved claims
-                var averageRateApproved = approvedClaims.Average(c => c.HourlyRate);
-                var highestRateApproved = approvedClaims.Max(c => c.HourlyRate);
-                var lowestRateApproved = approvedClaims.Min(c => c.HourlyRate);
-                var medianRateApproved = Median(approvedClaims.Select(c => c.HourlyRate));
 
-                var averageTotalAmountApproved = approvedClaims.Average(c => c.FinalAmount);
-                var highestTotalAmountApproved = approvedClaims.Max(c => c.FinalAmount);
-                var lowestTotalAmountApproved = approvedClaims.Min(c => c.FinalAmount);
-                var medianTotalAmountApproved = Median(approvedClaims.Select(c => c.FinalAmount));
+                var averageTotalAmountApproved = Math.Round(approvedClaims.Average(c => c.FinalAmount), 2);
+                var highestTotalAmountApproved = Math.Round(approvedClaims.Max(c => c.FinalAmount), 2);
+                var lowestTotalAmountApproved = Math.Round(approvedClaims.Min(c => c.FinalAmount), 2);
+                var medianTotalAmountApproved = Math.Round(Median(approvedClaims.Select(c => c.FinalAmount)), 2);
 
-                var averageHoursApproved = approvedClaims.Average(c => c.HoursWorked);
-                var highestHoursApproved = approvedClaims.Max(c => c.HoursWorked);
-                var lowestHoursApproved = approvedClaims.Min(c => c.HoursWorked);
-                var medianHoursApproved = Median(approvedClaims.Select(c => c.HoursWorked));
-
-                // calculate the aggregate data for the pending claims
-                var averageRatePending = pendingClaims.Average(c => c.HourlyRate);
-                var highestRatePending = pendingClaims.Max(c => c.HourlyRate);
-                var lowestRatePending = pendingClaims.Min(c => c.HourlyRate);
-                var medianRatePending = Median(pendingClaims.Select(c => c.HourlyRate));
-
-                var averageTotalAmountPending = pendingClaims.Average(c => c.FinalAmount);
-                var highestTotalAmountPending = pendingClaims.Max(c => c.FinalAmount);
-                var lowestTotalAmountPending = pendingClaims.Min(c => c.FinalAmount);
-                var medianTotalAmountPending = Median(pendingClaims.Select(c => c.FinalAmount));
-
-                var averageHoursPending = pendingClaims.Average(c => c.HoursWorked);
-                var highestHoursPending = pendingClaims.Max(c => c.HoursWorked);
-                var lowestHoursPending = pendingClaims.Min(c => c.HoursWorked);
-                var medianHoursPending = Median(pendingClaims.Select(c => c.HoursWorked));
+                var averageHoursApproved = Math.Round(approvedClaims.Average(c => c.HoursWorked), 2);
+                var highestHoursApproved = Math.Round(approvedClaims.Max(c => c.HoursWorked), 2);
+                var lowestHoursApproved = Math.Round(approvedClaims.Min(c => c.HoursWorked), 2);
+                var medianHoursApproved = Math.Round(Median(approvedClaims.Select(c => c.HoursWorked)), 2);
 
                 // calculate the summary data for the approved claims
-                var totalHoursApproved = approvedClaims.Sum(c => c.HoursWorked);
-                var totalAmountApproved = approvedClaims.Sum(c => c.FinalAmount);
+                var totalHoursApproved = Math.Round(approvedClaims.Sum(c => c.HoursWorked), 2);
+                var totalAmountApproved = Math.Round(approvedClaims.Sum(c => c.FinalAmount), 2);
                 var totalClaimsApproved = approvedClaims.Count;
+
 
                 // create an ReportNumber
                 Random random = new Random();
@@ -153,11 +134,6 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
 
                     ApprovedClaims = approvedClaims,
                     PendingClaims = pendingClaims,
-
-                    AverageRate = averageRateApproved,
-                    HighestRate = highestRateApproved,
-                    LowestRate = lowestRateApproved,
-                    MedianRate = medianRateApproved,
 
                     AverageTotalAmount = averageTotalAmountApproved,
                     HighestTotalAmount = highestTotalAmountApproved,
