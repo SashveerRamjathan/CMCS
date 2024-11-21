@@ -1,0 +1,164 @@
+﻿@using ST10361554_PROG6212_POE_Part_3_CMCS.ViewModels;
+@model ReportIndexViewModel
+
+@{
+	ViewData["Title"] = "Generate and View Invoices";
+	string? successMessage = ViewData["SuccessMessage"] as string;
+	string? errorMessage = ViewData["ErrorMessage"] as string;
+}
+
+<style>
+
+	.btn-primary {
+		border-radius: 20px;
+		background-color: #f46516;
+		color: #ffffff;
+		border: none;
+	}
+
+		.btn-primary:hover {
+			background-color: #0a9d9b;
+			color: #ffffff;
+		}
+
+	.btn-approve {
+		background-color: #28a745;
+		color: #ffffff;
+		border: none;
+		border-radius: 20px;
+	}
+
+		.btn-approve:hover {
+			background-color: lightgreen;
+			color: #333333;
+		}
+
+	.card {
+		background-color: #ffffff;
+		border: none;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+		.card h5 {
+			color: #f46516;
+		}
+
+</style>
+
+<h1 class="display-4 mb-4">Generate And View Claim Statistics Reports</h1>
+<p class="lead">
+	Generate new claim statistics reports and view old ones below.
+</p>
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+	<div class="alert alert-success mb-2" role="alert">
+		@successMessage
+	</div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<div class="alert alert-danger mb-2" role="alert">
+		@errorMessage
+	</div>
+}
+
+<div class="card m-2">
+	<div class="card-body">
+		<h5 class="card-title">Generate New Report</h5>
+		
+		@if (Model == null || Model.Months == null || Model.Months.Count == 0 || Model.Modules == null || Model.Modules.Count == 0)
+		{
+			<p class="card-text">Unable to generate reports, no claims in the database</p>
+		}
+		else
+		{
+			<form method="get" asp-controller="Report" asp-action="GenerateReport">
+				<!-- Dropdowns Row -->
+				<div class="row mb-3">
+					<!-- Month Dropdown -->
+					<div class="col-md-6">
+						<label class="form-label">Select Month</label>
+						<select id="month" name="month" class="form-control">
+							<option value="">Select Month</option>
+							@foreach (var month in Model.Months)
+							{
+								<option value="@month">@month</option>
+							}
+						</select>
+					</div>
+
+					<!-- Module Dropdown -->
+					<div class="col-md-6">
+						<label class="form-label">Select Module</label>
+						<select id="module" name="module" class="form-control">
+							<option value="">Select Module</option>
+							@foreach (var module in Model.Modules)
+							{
+								<option value="@module">@module</option>
+							}
+						</select>
+					</div>
+				</div>
+
+				<!-- Button Row -->
+				<div class="row">
+					<div class="col text-end">
+						<!-- Align the button to the right -->
+						<button type="submit" class="btn btn-approve">Generate Report</button>
+					</div>
+				</div>
+			</form>
+		}
+
+	</div>
+</div>
+
+<br />
+<br />
+
+@if (Model == null || Model.Reports == null || Model.Reports.Count == 0)
+{
+	<div class="card m-2">
+		<div class="card-body">
+			<h5 class="card-title">Generated Reports</h5>
+			<p class="card-text">There are no reports to display at the moment</p>
+		</div>
+	</div>
+}
+else
+{
+	<div class="card m-2">
+		<div class="card-body">
+			<h2 class="card-title">Generated Reports</h2>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead style="background-color: #f46516; color: #fff;">
+						<tr>
+							<th>Report Name</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var report in Model.Reports)
+						{
+							<tr>
+								<td>@report.DocumentName</td>
+								<td>
+									<div class="d-flex">
+										<a class="btn btn-primary me-3" asp-controller="Report" asp-action="ViewReport" asp-route-id="@report.Id" target="_blank">View</a>
+										<a class="btn btn-approve me-1" asp-controller="Report" asp-action="DownloadReport" asp-route-id="@report.Id">Download</a>
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+}
+
+
