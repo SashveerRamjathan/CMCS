@@ -46,6 +46,10 @@
 		border-radius: 10px;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 100%;
 	}
 
 		.card.card-claim:hover {
@@ -103,25 +107,30 @@
 }
 else
 {
-	@foreach (var claim in Model.Claims)
-	{
-		<div class="col-md-4 mb-4">
-			<div class="card card-claim">
-				<div class="card-body">
-					<h5 class="card-title">Claim ID: @claim.Id</h5>
-					<p class="card-text"><strong>Claim Name: @claim.ClaimName</strong> </p>
-					<p class="card-text"><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
-					<p class="card-text"><strong>Faculty:</strong> @claim.User.Faculty</p>
-					<p class="card-text"><strong>Date:</strong> @claim.ClaimDate.ToString("D")</p>
-					<p class="card-text"><strong>Status:</strong>@claim.Status</p>
-					<p class="card-text"><strong>Total:</strong> R @claim.FinalAmount</p>
-					<a class="btn btn-approve" asp-controller="Invoice" asp-action="GenerateInvoice" asp-route-claimId="@claim.Id">
-						Generate Invoice
-					</a>
+	<div class="row">
+		@foreach (var claim in Model.Claims)
+		{
+			<div class="col-md-4 mb-4 d-flex align-items-stretch">
+				<div class="card card-claim h-100">
+					<div class="card-body d-flex flex-column">
+						<h5 class="card-title">Claim ID: @claim.Id</h5>
+						<p class="card-text"><strong>Claim Name: </strong> @claim.ClaimName</p>
+						<p class="card-text"><strong>Lecturer:</strong> @($"{claim.User.FirstName} {claim.User.Surname}")</p>
+						<p class="card-text"><strong>Faculty:</strong> @claim.User.Faculty</p>
+						<p class="card-text"><strong>Date:</strong> @claim.ClaimDate.ToString("D")</p>
+						<p class="card-text"><strong>Status: </strong>@claim.Status</p>
+						<p class="card-text"><strong>Total:</strong> R @claim.FinalAmount</p>
+						<!-- Spacer div -->
+						<div class="mt-auto">
+							<a class="btn btn-approve" asp-controller="Invoice" asp-action="GenerateInvoice" asp-route-claimId="@claim.Id">
+								Generate Invoice
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-	}
+		}
+	</div>
 }
 
 <br />
@@ -150,7 +159,7 @@ else
 							<th>Claim Name</th>
 							<th>Lecturer</th>
 							<th>Claim Date</th>
-							<th>Claim Total</th>
+							<th>Total</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -165,8 +174,10 @@ else
 								<td>@invoice.Claim.ClaimDate</td>
 								<td>R @invoice.Claim.FinalAmount.ToString()</td>
 								<td>
-									<a class="btn btn-primary" asp-controller="Invoice" asp-action="ViewInvoice" asp-route-claimId="@invoice.Claim.Id" target="_blank">View</a>
-									<a class="btn btn-approve" asp-controller="Invoice" asp-action="DownloadInvoice" asp-route-claimId="@invoice.Claim.Id">Download</a>
+									<div class="d-flex">
+										<a class="btn btn-primary me-3" asp-controller="Invoice" asp-action="ViewInvoice" asp-route-claimId="@invoice.Claim.Id" target="_blank">View</a>
+										<a class="btn btn-approve me-1" asp-controller="Invoice" asp-action="DownloadInvoice" asp-route-claimId="@invoice.Claim.Id">Download</a>
+									</div>
 								</td>
 							</tr>
 						}
