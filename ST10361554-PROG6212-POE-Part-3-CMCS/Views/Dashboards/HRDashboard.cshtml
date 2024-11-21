@@ -64,13 +64,13 @@
             </div>
         </div>
 
-        <!-- Generate Claim Statistics Report -->
+        <!-- Generate Claim Invoices -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm disabled">
-                <div class="card-body disabled">
-                    <h5 class="card-title">Generate Claim Statistics Report</h5>
-                    <p class="card-text">Generate detailed reports on claim statistics and trends.</p>
-                    <a asp-area="" asp-controller="" asp-action="" class="btn btn-primary disabled">Coming Soon!</a>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Generate and View Claim Invoices</h5>
+                    <p class="card-text">Generate invoices for approved claims.</p>
+                    <a asp-area="" asp-controller="Invoice" asp-action="Index" class="btn btn-primary">Generate Invoices</a>
                 </div>
             </div>
         </div>
@@ -99,13 +99,13 @@
             </div>
         </div>
 
-        <!-- Generate Claim Invoices -->
+        <!-- Generate Claim Statistics Report -->
         <div class="col-md-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">Generate and View Claim Invoices</h5>
-                    <p class="card-text">Generate invoices for approved claims.</p>
-                    <a asp-area="" asp-controller="Invoice" asp-action="Index" class="btn btn-primary">Generate Invoices</a>
+                    <h5 class="card-title">Generate Claim Statistics Report</h5>
+                    <p class="card-text">Generate detailed reports on claim statistics and trends.</p>
+                    <a asp-area="" asp-controller="Report" asp-action="Index" class="btn btn-primary">Generate Reports</a>
                 </div>
             </div>
         </div>
