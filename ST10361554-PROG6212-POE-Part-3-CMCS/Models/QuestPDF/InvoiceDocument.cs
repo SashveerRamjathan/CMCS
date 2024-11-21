@@ -44,7 +44,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
         // Method to compose the header section
         private void ComposeHeader(IContainer container)
         {
-            container.Row(row =>
+            container.ShowOnce().Row(row =>
             {
                 row.RelativeItem().Column(column =>
                 {
@@ -151,6 +151,44 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
             });
         }
 
+        private void ComposeBankingDetails(IContainer container)
+        {
+            Claim claim = Model.LecturerClaim; // Get the claim details
+
+            var labelStyle = TextStyle.Default.FontSize(12).Bold(); // Style for labels
+            var valueStyle = TextStyle.Default.FontSize(12); // Style for values
+
+            container.Padding(5).Column(column =>
+            {
+                // Claim Title
+                column.Item().Text("Account Details").Style(TextStyle.Default.FontSize(16).Bold());
+
+                // add spacing between the title and the claim details
+                column.Item().Row(row => row.RelativeItem().Height(5)); // Adds space without affecting layout
+
+                column.Spacing(5); // Add spacing between rows
+
+                // Add each claim detail row
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem(2).Text("Account Number:").Style(labelStyle);
+                    row.RelativeItem(3).Text(claim.User.AccountNumber).Style(valueStyle);
+                });
+
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem(2).Text("Bank Name:").Style(labelStyle);
+                    row.RelativeItem(3).Text(claim.User.BankName).Style(valueStyle);
+                });
+
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem(2).Text("Branch Code:").Style(labelStyle);
+                    row.RelativeItem(3).Text(claim.User.BranchCode).Style(valueStyle);
+                });
+            });
+        }
+
 
         // Method to compose the main content of the invoice
         private void ComposeContent(IContainer container)
@@ -172,6 +210,10 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                 column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
 
                 column.Item().Element(ComposeClaimDetails); // Add the claim details
+
+                column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
+
+                column.Item().Element(ComposeBankingDetails); // Add the lecturers banking details
 
                 column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
 
