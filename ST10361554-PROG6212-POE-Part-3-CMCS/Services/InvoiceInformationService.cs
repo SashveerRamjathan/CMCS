@@ -92,9 +92,9 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
 
                 // Get the invoice comments
                 string comments = "Thank you for your valuable contribution to our institution. " +
-                    $"\nThis claim invoice (Claim ID: {claim.Id}) has been issued for your payment. " +
-                    "\nIf you have any questions or require further clarification, " +
-                    "please contact us at 011 682 7901 or via email at support@cmcs.edu.za" +
+                    $"\n\nThis claim invoice (Claim ID: {claim.Id}) has been issued for your payment. " +
+                    "\n\nIf you have any questions or require further clarification, " +
+                    "\nplease contact us at 011 682 7901 or via email at support@cmcs.edu.za" +
                     "\n\nWe appreciate your dedication to academic excellence.";
 
                 // Get the image as a byte array
