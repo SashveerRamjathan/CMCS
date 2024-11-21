@@ -95,15 +95,16 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                 // Claim Title
                 column.Item().Text("Approved Claims").Style(TextStyle.Default.FontSize(16).Bold().FontColor(Colors.Orange.Medium));
 
-                // add spacing between the title and the claim details
-                column.Item().Row(row => row.RelativeItem().Height(5)); // Adds space without affecting layout
+                // Add spacing between the title and the table
+                column.Item().Height(5);
 
-                container.Table(table =>
+                column.Item().Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
                     {
                         columns.ConstantColumn(25); // Index column
-                        columns.RelativeColumn(3); // Claim name column
+                        columns.RelativeColumn(); // Claim name column
+                        columns.RelativeColumn(); // claim status column
                         columns.RelativeColumn(); // Hours worked column
                         columns.RelativeColumn(); // Hourly Rate column
                         columns.RelativeColumn(); // Final Amount column
@@ -113,11 +114,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     {
                         header.Cell().Text("#");
                         header.Cell().Text("Claim Name").Style(headerStyle);
+                        header.Cell().Text("Claim Status").Style(headerStyle);
                         header.Cell().AlignRight().Text("Hours Worked").Style(headerStyle);
                         header.Cell().AlignRight().Text("Hourly Rate").Style(headerStyle);
                         header.Cell().AlignRight().Text("Final Amount").Style(headerStyle);
 
-                        header.Cell().ColumnSpan(5).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black); // Header bottom border
+                        header.Cell().ColumnSpan(6).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black); // Header bottom border
                     });
 
                     // Add each item to the table
@@ -127,6 +129,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
 
                         table.Cell().Element(CellStyle).Text($"{index}");
                         table.Cell().Element(CellStyle).Text(item.ClaimName);
+
+                        table.Cell().Element(CellStyle).Text(item.Status);
 
                         table.Cell().Element(CellStyle).AlignRight().Text($"{item.HoursWorked}");
                         table.Cell().Element(CellStyle).AlignRight().Text($"{item.HourlyRate.ToString("C", new CultureInfo("en-ZA"))}");
@@ -150,15 +154,16 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                 // Claim Title
                 column.Item().Text("Pending Claims").Style(TextStyle.Default.FontSize(16).Bold().FontColor(Colors.Orange.Medium));
 
-                // add spacing between the title and the claim details
-                column.Item().Row(row => row.RelativeItem().Height(5)); // Adds space without affecting layout
+                // Add spacing between the title and the table
+                column.Item().Height(5);
 
-                container.Table(table =>
+                column.Item().Table(table =>
                 {
                     table.ColumnsDefinition(columns =>
                     {
                         columns.ConstantColumn(25); // Index column
-                        columns.RelativeColumn(3); // Claim name column
+                        columns.RelativeColumn(); // Claim name column
+                        columns.RelativeColumn(); // Claim status column
                         columns.RelativeColumn(); // Hours worked column
                         columns.RelativeColumn(); // Hourly Rate column
                         columns.RelativeColumn(); // Final Amount column
@@ -168,20 +173,23 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     {
                         header.Cell().Text("#");
                         header.Cell().Text("Claim Name").Style(headerStyle);
+                        header.Cell().Text("Claim Status").Style(headerStyle);
                         header.Cell().AlignRight().Text("Hours Worked").Style(headerStyle);
                         header.Cell().AlignRight().Text("Hourly Rate").Style(headerStyle);
                         header.Cell().AlignRight().Text("Final Amount").Style(headerStyle);
 
-                        header.Cell().ColumnSpan(5).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black); // Header bottom border
+                        header.Cell().ColumnSpan(6).PaddingTop(5).BorderBottom(1).BorderColor(Colors.Black); // Header bottom border
                     });
 
                     // Add each item to the table
-                    foreach (var item in Model.ApprovedClaims)
+                    foreach (var item in Model.PendingClaims)
                     {
-                        var index = Model.ApprovedClaims.IndexOf(item) + 1;
+                        var index = Model.PendingClaims.IndexOf(item) + 1;
 
                         table.Cell().Element(CellStyle).Text($"{index}");
                         table.Cell().Element(CellStyle).Text(item.ClaimName);
+
+                        table.Cell().Element(CellStyle).Text(item.Status);
 
                         table.Cell().Element(CellStyle).AlignRight().Text($"{item.HoursWorked}");
                         table.Cell().Element(CellStyle).AlignRight().Text($"{item.HourlyRate.ToString("C", new CultureInfo("en-ZA"))}");
@@ -239,31 +247,6 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                 column.Item().Text("Aggregate Data for Accepted Claims").Style(headingStyle);
                 column.Spacing(10); // Add spacing between sections
 
-                // Subheading: Claim Rates
-                column.Item().Text("Claim Rates").Style(subheadingStyle);
-                column.Item().Row(row =>
-                {
-                    row.RelativeItem(2).Text("Average Rate:").Style(labelStyle);
-                    row.RelativeItem(3).Text(Model.AverageRate.ToString("C", new CultureInfo("en-ZA"))).Style(valueStyle);
-                });
-                column.Item().Row(row =>
-                {
-                    row.RelativeItem(2).Text("Highest Rate:").Style(labelStyle);
-                    row.RelativeItem(3).Text(Model.HighestRate.ToString("C", new CultureInfo("en-ZA"))).Style(valueStyle);
-                });
-                column.Item().Row(row =>
-                {
-                    row.RelativeItem(2).Text("Lowest Rate:").Style(labelStyle);
-                    row.RelativeItem(3).Text(Model.LowestRate.ToString("C", new CultureInfo("en-ZA"))).Style(valueStyle);
-                });
-                column.Item().Row(row =>
-                {
-                    row.RelativeItem(2).Text("Median Rate:").Style(labelStyle);
-                    row.RelativeItem(3).Text(Model.MedianRate.ToString("C", new CultureInfo("en-ZA"))).Style(valueStyle);
-                });
-
-                column.Spacing(10); // Add spacing between sections
-
                 // Subheading: Claim Hours
                 column.Item().Text("Claim Hours").Style(subheadingStyle);
                 column.Item().Row(row =>
@@ -287,7 +270,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     row.RelativeItem(3).Text($"{Model.MedianHours} hours").Style(valueStyle);
                 });
 
-                column.Spacing(10); // Add spacing between sections
+                column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
 
                 // Subheading: Claim Totals
                 column.Item().Text("Claim Totals").Style(subheadingStyle);
@@ -314,7 +297,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
             });
         }
 
-        // Method to compose the main content of the invoice
+        // Method to compose the main content of the report
         private void ComposeContent(IContainer container)
         {
             container.PaddingVertical(40).Column(column =>
