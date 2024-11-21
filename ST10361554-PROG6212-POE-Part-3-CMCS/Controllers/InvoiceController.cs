@@ -118,12 +118,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     if (claimsToInvoice == null || !claimsToInvoice.Any())
                     {
                         _logger.LogWarning("No claims found to invoice for the selected faculty.");
-                        TempData["ErrorMessage"] = "No claims found to invoice for the selected faculty.";
-                        ViewData["ErrorMessage"] = TempData["ErrorMessage"];
-                        return View(model);
                     }
-
-                    _logger.LogInformation("Claims found to invoice for the selected faculty");
 
                     model.Claims = claimsToInvoice;
 
@@ -176,12 +171,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     if (claimsToInvoice == null || !claimsToInvoice.Any())
                     {
                         _logger.LogWarning("No claims found to invoice.");
-                        TempData["ErrorMessage"] = "No claims found to invoice.";
-                        ViewData["ErrorMessage"] = TempData["ErrorMessage"];
-                        return View(model);
                     }
-
-                    _logger.LogInformation("Claims found to invoice");
 
                     model.Claims = claimsToInvoice;
 
@@ -208,6 +198,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
                     }
 
                     model.InvoiceItems = invoiceItems;
+
+                    ViewData["SuccessMessage"] = TempData["SuccessMessage"];
 
                     return View(model);
                 }
