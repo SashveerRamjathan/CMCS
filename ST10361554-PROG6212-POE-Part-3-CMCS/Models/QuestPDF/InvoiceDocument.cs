@@ -23,7 +23,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
             container
                 .Page(page =>
                 {
-                    page.Margin(50); // Set page margins
+                    page.Margin(35); // Set page margins
 
                     page.Header().Element(ComposeHeader); // Compose the header
                     page.Content().Element(ComposeContent); // Compose the content
@@ -51,6 +51,8 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     column
                         .Item().Text($"Invoice #{Model.InvoiceNumber}")
                         .FontSize(20).SemiBold().FontColor(Colors.Orange.Medium); // Invoice number
+
+                    column.Item().Row(row => row.RelativeItem().Height(5)); // Adds space without affecting layout
 
                     column.Item().Text(text =>
                     {
@@ -88,10 +90,13 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
             var labelStyle = TextStyle.Default.FontSize(12).Bold(); // Style for labels
             var valueStyle = TextStyle.Default.FontSize(12); // Style for values
 
-            container.Padding(10).Column(column =>
+            container.Padding(5).Column(column =>
             {
                 // Claim Title
                 column.Item().Text("Claim Details").Style(TextStyle.Default.FontSize(16).Bold());
+
+                // add spacing between the title and the claim details
+                column.Item().Row(row => row.RelativeItem().Height(5)); // Adds space without affecting layout
 
                 column.Spacing(5); // Add spacing between rows
 
@@ -162,16 +167,18 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
                     row.RelativeItem().Component(new AddressComponent("For", Model.LecturerAddress));
                 });
 
-                column.Item().PaddingBottom(5).LineHorizontal(1); // Add a horizontal line with padding
+                column.Spacing(5);
+
+                column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
 
                 column.Item().Element(ComposeClaimDetails); // Add the claim details
 
-                column.Item().PaddingBottom(5).LineHorizontal(1); // Add a horizontal line with padding
+                column.Item().PaddingBottom(1).LineHorizontal(1); // Add a horizontal line with padding
 
                 // Add comments section if there are any comments
                 if (!string.IsNullOrWhiteSpace(Model.Comments))
                 {
-                    column.Item().PaddingTop(25).Element(ComposeComments);
+                    column.Item().PaddingTop(5).Element(ComposeComments);
                 }
             });
         }
