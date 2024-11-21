@@ -17,4 +17,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     // Add DbSet for Invoices
     public DbSet<Invoice> Invoice { get; set; }
+
+    // Add DbSet for Report
+    public DbSet<Report> Report { get; set; }
 }
