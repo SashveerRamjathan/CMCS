@@ -13,6 +13,7 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
         // Rajesh Shirsagar
         // 9 October 2024
         // https://www.linkedin.com/pulse/overview-how-seed-users-roles-code-aspnet-core-rajesh-shirsagar/
+
         public SeedDatabase(
             UserManager<ApplicationUser> userManager,
             ILogger<SeedDatabase> logger)
