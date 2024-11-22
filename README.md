@@ -12,7 +12,13 @@ The system is designed with role-based access control, ensuring that users can o
 
 The demonstration video for the Contract Monthly Claim System (CMCS) can be viewed here:
 
-{GOES HERE}
+### Web App Video Presentation
+
+https://advtechonline-my.sharepoint.com/:v:/g/personal/st10361554_vcconnect_edu_za/EUJ6OFKlXsZBqna0jsmKxjYBJ4wcZJ1fmGX6faa7FN0Yhw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vyeWGc
+
+### Database Video Recording Of Data Entries
+
+https://advtechonline-my.sharepoint.com/:v:/g/personal/st10361554_vcconnect_edu_za/EcjNHmDs7uhBl_Uv-Yv1qRABOknQWafNmS91EaTceHYEgw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=pgf0Cg
 
 ## Features
 
