@@ -39,6 +39,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Services
                     // Create the ReportDocument using QuestPDF
                     var reportDocument = new ReportDocument(reportInfo);
 
+                    // Code Attribution:
+                    // Reading and Writing Files in ASP.NET Core from memory streams to byte arrays
+                    // DA_VDCT
+                    // 15 October 2024
+                    // https://stackoverflow.com/questions/60001470/c-sharp-problem-reading-file-memorystream-in-my-mvc-project
+
                     // Generate the PDF into a memory stream
                     using (var memoryStream = new MemoryStream())
                     {
