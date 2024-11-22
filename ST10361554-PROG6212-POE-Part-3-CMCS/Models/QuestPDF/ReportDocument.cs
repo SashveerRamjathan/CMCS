@@ -6,6 +6,12 @@ using System.Globalization;
 
 namespace ST10361554_PROG6212_POE_Part_3_CMCS.Models.QuestPDF
 {
+    // Code Attribution:
+    // Getting started
+    // QuestPDF
+    // https://www.questpdf.com/getting-started.html
+    // Accessed 2024-11-21
+
     [NotMapped]
     public class ReportDocument : IDocument
     {
