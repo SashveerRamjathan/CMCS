@@ -319,8 +319,14 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                 _logger.LogInformation($"Invoice for claim {claimId} found");
 
+                // Code Attribution:
+                // How to open PDF file in a new tab or window instead of downloading it using C# and ASP.NET MVC?
+                // marc_s
+                //  Mar 5, 2019 at 5:47
+                // https://stackoverflow.com/questions/54995753/how-to-open-pdf-file-in-a-new-tab-or-window-instead-of-downloading-it-using-c-sh
+
                 // return the invoice as a file in a new tab
-                
+
                 HttpContext.Response.Headers.Append("Content-Disposition", $"inline; filename={invoice.DocumentName}");
 
                 return File(invoice.Document, invoice.DocumentType);
@@ -364,6 +370,12 @@ namespace ST10361554_PROG6212_POE_Part_3_CMCS.Controllers
 
                 TempData["SuccessMessage"] = $"Invoice for claim {claimId} downloaded successfully";
                 ViewData["SuccessMessage"] = TempData["SuccessMessage"];
+
+                // Code Attribution:
+                // Download file in C# .Net Core
+                // Pratham Jain
+                // 16 October 2024
+                // https://learn.microsoft.com/en-us/answers/questions/1033258/download-file-in-c-net-core
 
                 // return the invoice as a file to download
                 return File(invoice.Document, invoice.DocumentType, invoice.DocumentName);
