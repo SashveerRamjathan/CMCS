@@ -1,227 +1,125 @@
-# Contract Monthly Claim System (CMCS)
+# 📊 Contract Monthly Claim System (CMCS)
 
-## Overview
+## 🚀 Overview
 
-The Contract Monthly Claim System (CMCS) is a web-based application designed to streamline the submission and approval of monthly claims for Independent Contractor (IC) lecturers. This system facilitates interactions between lecturers, HR personnel, and Academic Managers to ensure a smooth and efficient claims process.
+The **Contract Monthly Claim System (CMCS)** is a **web-based application** designed to streamline the submission and approval of monthly claims for **Independent Contractor (IC)** lecturers. This system facilitates seamless interactions between **Lecturers**, **HR Personnel**, and **Academic Managers** to ensure an efficient claims process.
 
-The CMCS allows lecturers to submit claims for hours worked, with the option to attach supporting documents. Academic Managers and HR personnel can review, approve, or reject claims, with real-time status updates to track the progress of each claim.
+Lecturers can submit claims for hours worked, upload supporting documents, and track claim statuses. Academic Managers and HR personnel can review, approve, or reject claims in real-time. The system also includes features such as **role-based access control**, automatic **invoice and report generation**, and **document uploads**.
 
-The system is designed with role-based access control, ensuring that users can only access functionalities relevant to their roles. It includes features such as user management, claims submission, claims approval, document upload, and claim tracking and automatic report and invoice generation.
+---
 
-## Demonstration Video Link
+## 🔧 Tech Stack
 
-The demonstration video for the Contract Monthly Claim System (CMCS) can be viewed here:
+- **C#** for backend programming
+- **.NET Core** and **ASP.NET Core MVC** for the web framework
+- **Entity Framework Core** for database access
+- **QuestPDF** for generating invoices and reports
+- **FluentValidation** for ensuring data integrity
+- **SQL Server** for database management
+- **HTML, CSS, JavaScript (jQuery)** for frontend enhancements
 
-### Web App Video Presentation
+---
 
-https://advtechonline-my.sharepoint.com/:v:/g/personal/st10361554_vcconnect_edu_za/EUJ6OFKlXsZBqna0jsmKxjYBJ4wcZJ1fmGX6faa7FN0Yhw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vyeWGc
+## 🎯 Key Features
 
-### Database Video Recording Of Data Entries
+### 1. **User Management** 🔑
+- Manage different user roles: **HR**, **Lecturers**, and **Academic Managers**.
+- Role-based access control ensuring only relevant features are available to each user.
 
-https://advtechonline-my.sharepoint.com/:v:/g/personal/st10361554_vcconnect_edu_za/EcjNHmDs7uhBl_Uv-Yv1qRABOknQWafNmS91EaTceHYEgw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=pgf0Cg
+### 2. **Claim Submission** 💼
+- **Lecturers** can submit claims via a simple and intuitive form.
+- Fields include **hours worked**, **hourly rate**, and **additional notes**.
+- **Document upload** feature allows lecturers to submit supporting files (PDF, DOCX, XLSX).
 
-## Features
-
-- **User Management**: Manage different user roles including HR, Lecturers, and Academic Managers.
+### 3. **Claims Approval** ✅❌
+- **Academic Managers** and **HR** can review, approve, or reject claims.
+- Each claim has a clear status (e.g., **Pending**, **Approved**, **Rejected**) for easy tracking.
   
-- **Claims Submission**: Lecturers can submit claims for hours worked with a simple and intuitive form.
-  
-- **Claims Approval**: Academic Managers and HR personnel can review, approve, or reject claims.
-  
-- **Document Upload**: Lecturers can upload supporting documents for their claims.
-  
-- **Claim Tracking**: Track the status of claims transparently until they are settled.
-  
-- **Role-Based Access Control**: Different functionalities are accessible based on user roles.
-  
-- **Database Seeding**: Automatically seed roles and users into the database on application start-up.
-  
-- **Automatic Invoice and Report Generation**: Generates professional invoices and detailed reports for claims using QuestPDF, reducing manual effort.
+### 4. **Claim Tracking** 📊
+- Track the progress of claims in real-time with **status updates**.
 
-### Automatic Report and Invoice Generation
+### 5. **Automatic Invoice & Report Generation** 📑💸
+- Generates professional invoices and detailed claims reports in **PDF** format using **QuestPDF**.
+- Includes summaries like **total claims**, **average amount**, and **approved claims**.
 
-A new feature integrates the QuestPDF library to generate invoices and reports automatically for claims. This ensures consistency in the formatting and provides a professional output for administrative and record-keeping purposes.
+### 6. **FluentValidation for Data Integrity** 🔒
+- Validates all data entries to ensure accuracy and completeness.
+- Provides real-time feedback to users with error messages for invalid input.
 
-#### Features of the Report and Invoice Generator:
+---
 
-- **Automated Workflow**: Generates invoices at the click of a button, gathering the information it needs from the database itself.
-- **PDF Format**: Produces high-quality, print-ready PDF documents.
-- **Aggregate Details**: Reports include statistical summaries such as average, maximum, minimum, and total amounts for claims.
-- **Claim Summaries**: Lists details of individual approved claims, including hours worked and final amounts in table format in reports.
-- **Consistent Design**: Ensures all invoices and reports maintain a unified and professional layout.
+## 🔄 **Features in Detail**
 
-The generated documents are stored securely in the database, accessible only by HR for later retrieval, ensuring easy access and compliance with record-keeping standards.
+### 🖥️ **Lecturer View**  
+Lecturers can:  
+- Submit claims anytime with an easy-to-use form.  
+- Upload supporting documents.  
+- Track the status of claims as they move through the approval process.
 
-### Fluent Validation for Data Integrity
+### 📋 **Academic Manager & HR View**  
+Academic Managers and HR can:  
+- View all **pending claims**.  
+- **Approve or Reject** claims.  
+- **Download supporting documents**.  
+- Track **claim statuses** in real-time.
 
-The system incorporates FluentValidation to ensure the integrity and validity of data submitted by users. This framework improves the reliability of the application by enforcing robust validation rules before processing user input.
+### 🧾 **Report & Invoice Generation**  
+Generate and download professional reports and invoices automatically.  
+- **PDF format**: High-quality and ready to print.  
+- **Automated workflows** for consistent formatting and easier record-keeping.
 
-#### Features of FluentValidation Integration:
+### 🔒 **Data Validation**  
+- Ensures that only valid data is entered using **FluentValidation**.
+- Guarantees that claims are valid and complete before being processed.
 
-- **Claim Validation**: Validates claim submissions to ensure all required fields are provided and conform to business rules.
-- **Lecturer and Academic Manager Information Validation**: Ensures data integrity when updating user profiles.
+---
 
-#### Benefits of Using FluentValidation:
-
-- **Improved User Experience**: Provides immediate feedback to users on invalid input through descriptive error messages.
-- **Centralized Rule Management**: Validation rules are defined in dedicated classes, making them easy to maintain and update.
-- **Consistency**: Guarantees uniform validation across the application, reducing the risk of processing invalid or incomplete data.
-- **Scalability**: Easily adaptable to future validation requirements as the system grows.
-  
-This integration ensures the data entering the system adheres to predefined standards, promoting smoother workflows and reducing errors in claim processing and user management.
-
-## Project Structure
+## 📁 **Project Structure**
 
 ### Controllers
-
-- **ClaimsController**: Manages the submission and approval of claims.
-  
-- **DashboardsController**: Provides dashboards tailored for different user roles.
-  
+- **ClaimsController**: Manages claim submission and approval.
+- **DashboardsController**: Provides role-specific dashboards.
 - **StaffController**: Manages staff details and roles.
-  
-- **RegistrationsController**: Manages the approve an reject of IC lecturers and academic managers to allow only authorised users to access the system.
-  
-- **ReportController**: Manages the generation, viewing, and saving of claim reports.
-  
-- **InvoiceController**: Manages the generation, viewing, and saving of claim invoices.
+- **RegistrationsController**: Manages user registrations and access permissions.
+- **ReportController**: Generates claim reports.
+- **InvoiceController**: Generates and saves claim invoices.
 
 ### Services
-
-- **SeedDatabase**: Seeds initial data into the database, if the application is run for the first time and the database is empty lecturer, academic manager and HR users are      created allowing the system to be demonstrated.
-
-- **ReportInformationService**: Retrieves and organizes the necessary data for generating reports. This service aggregates claim information, such as total claims submitted, approved claims, and pending claims, and provides statistical summaries to assist in decision-making.
-  
-- **ReportGenerationService**: Utilizes the data provided by the ReportInformationService to create detailed, professional reports in PDF format. These reports include summaries, analytics, designed for administrative review and record-keeping.
-  
-- **InvoiceInformationService**: Gathers and structures data required for generating invoices. It ensures the inclusion of essential details like claim amounts, lecturer information, claim descriptions.
-  
-- **InvoiceGenerationService**: Leverages QuestPDF to produce high-quality invoices in PDF format. It applies a consistent and professional layout, ensuring compliance with organizational standards. This service is triggered by HR for approved claims, automating the invoice generation process for seamless operations.
+- **SeedDatabase**: Seeds initial data (roles, users).
+- **ReportInformationService**: Aggregates data for reports.
+- **ReportGenerationService**: Generates reports in PDF.
+- **InvoiceGenerationService**: Generates invoices in PDF using **QuestPDF**.
 
 ### Fluent Validators
-
-- **ClaimValidator**: Ensures that claims submitted by lecturers meet all required criteria.
-
-- **UpdateLecturerDetailsValidator**:Ensures the integrity of data when updating lecturer profiles.
-  
-- **UpdateAcademicManagerValidator**: Ensures the integrity of data when updating academic manager profiles.
+- **ClaimValidator**: Ensures valid claims are submitted.
+- **UpdateLecturerDetailsValidator**: Ensures lecturer data integrity.
+- **UpdateAcademicManagerValidator**: Ensures academic manager data integrity.
 
 ### Database Models
+- **ApplicationUser**: Represents users (Lecturers, Academic Managers, HR).
+- **Claim**: Represents claims submitted by lecturers.
+- **Invoice**: Represents generated invoices.
+- **Report**: Represents generated reports.
 
-- **ApplicationUser**: Extends the IdentityUser class to include additional user information.
+---
+
+## 💡 **What I Learned** 📚
+
+Through building this project, I gained valuable experience in:
+
+* **ASP.NET Core MVC**: Gaining a deeper understanding of how to build dynamic web applications using this powerful framework.
   
-- **Claim**: Represents a claim submitted by a lecturer.
+* **Entity Framework Core**: Learning how to interact with SQL Server databases, perform CRUD operations, and handle migrations.
   
-- **Invoice**: Represents an invoice that is generated by the system.
+* **Role-based Access Control (RBAC)**: Implementing user roles with specific access to features and functionality, which was essential for creating a multi-user system.
   
-- **Report**: Represents a report that is generated by the system.
-
-## Database Initialization
-
-The database is configured to create itself when the application runs for the first time, using Entity Framework Core's `EnsureCreatedAsync` method. It is automatically populated with the necessary roles and users.
-
-### Seeding Roles and Users
-
-The `SeedDatabase` service seeds the following roles:
-
-- **HR**
-- **Lecturer**
-- **Academic Manager**
-
-And the following users:
-
-- **HR User**
-- **Lecturer Users**
-- **Academic Manager Users**
-
-### Login and Account Information for Seeded Users
-
-The seeded users have the following login and account credentials:
-
-- **HR User**
-  - **Email**: `hr@mail.com`
-  - **Password**: `Hr@123`
-
-- **Lecturer Users**
-  - **Email**: `lecturer@mail.com` (User 1) [Approved]
-  - **Email**: `lecturer2@mail.com` (User 2)
-  - **Email**: `lecturer3@mail.com` (User 3)
-
-  - **Password for all users**: `Lecturer@123`
-
-- **Academic Manager Users**
-  - **Email**: `academicmanager@mail.com` (User 1) [Approved]
-  - **Email**: `academicmanager3@mail.com` (User 1)
-  - **Email**: `academicmanager2@mail.com` (User 1)
+* **QuestPDF**: Using QuestPDF for generating professional invoices and reports. This provided a chance to dive into PDF generation and automated report creation.
   
-  - **Password for all users**: `AcademicM@123`
+* **FluentValidation**: Applying data validation techniques to ensure that only correct and complete data is processed, providing real-time feedback to users.
+  
+* **Frontend Development**: Improving my HTML, CSS, and JavaScript skills while building a user-friendly interface.
+  
+* **Project Management**: Managing both backend and frontend development, as well as the integration of various components like database management, PDF generation, and validation.
 
-## Claim Submission Process
+This project provided me with a hands-on opportunity to learn and apply modern web development practices, making me more proficient in the full-stack development process.
 
-Lecturers can submit claims at any time via a user-friendly interface. The claim submission form includes:
-
-- Claim Name
-- Claim Date
-- Claim Description
-- Hours worked
-- Hourly rate (provided upon account registration)
-- Total amount (calculated automatically)
-- An 'Upload' button for attaching supporting documents (restricted to .pdf, .docx, and .xlsx formats)
-
-## Claims Approval Process
-
-Programme Coordinators and Academic Managers have access to a separate view to verify and approve claims, with clear options to approve or reject each claim.
-
-They can also view the details of each claim, including the lecturer's name, claim date, hours worked, hourly rate, and total amount.
-
-They can also download any supporting documents attached to the claim.
-
-## Claim Tracking
-
-Each claim's status is tracked transparently, updating in real-time as it moves through the approval process. Statuses may include:
-
-- Pending
-- Approved
-- Rejected
-
-User intuitive progress bars are also provided to indicate the status of each claim, making it easy to identify claims that require attention.
-
-The progress bars are colour-coded to provide visual cues for the claim status:
-
-- **Green**: Approved
-- **Red**: Rejected
-- **Yellow**: Pending
-
-## Error Handling
-
-Robust error handling mechanisms are implemented to provide meaningful feedback to users in case of errors or exceptions. Error messages are displayed in a user-friendly format, guiding users on how to resolve the issue.
-
-Error handling is implemented at various levels, including:
-
-- **Global Error Handling**: Catches unhandled exceptions and logs the error details.
-- **Controller-Level Error Handling**: Provides specific error messages for different controller actions.
-- **Model Validation**: Ensures that data submitted by users is valid and meets the required criteria.
-- **User-Friendly Error Messages**: Displays error messages in a clear and concise format to guide users on how to proceed.
-- **Logging**: Logs error details to help diagnose and troubleshoot issues.
-
-
-## Technologies Used
-
-- **ASP.NET Core 8**: The web application framework used to build the CMCS.
-- **Entity Framework Core**: The object-relational mapping (ORM) framework used to interact with the database.
-- **Bootstrap**: The front-end framework used to design the user interface.
-- **Fluent Validation**: A library used to implement complex validation logic in a clean and maintainable way.
-- **QuestPDF**: A powerful library for generating high-quality PDF documents, used to create professional reports and invoices for claims automatically.
-- **Identity Framework**: The authentication and authorization framework used to manage user roles and permissions.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Student Information
-
-- **Name**: Sashveer Lakhan Ramjathan
-- **Student Number**: ST10361554
-- **Group**: 2
-- **Module**: Programming 2B
-- **Assessment**: POE Part 3
